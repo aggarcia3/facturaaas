@@ -30,6 +30,12 @@ Proyecto Java EE 7
    mysql> create database facturaaas;
    mysql> grant all privileges on facturaaas.* to facturaaas@localhost;
    ```
+   
+   Adicionalmente, puede ser necesario establecer un formato de fecha compatible
+   ```
+   mysql> set @@global.time_zone = '+00:00';
+   mysql> set @@session.time_zone = '+00:00';
+   ```
 
 * Descargar copia del proyecto desde GitHub
    ```
