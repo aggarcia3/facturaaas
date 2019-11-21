@@ -1,6 +1,9 @@
 package es.uvigo.esei.dagss.facturaaas.entidades;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -9,9 +12,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
-@Table("USUARIO")
+@Table(name = "USUARIO")
 public class Usuario implements Serializable {
 
     @Id
@@ -27,13 +32,23 @@ public class Usuario implements Serializable {
     private RolUsuario rol = RolUsuario.USUARIO;
     private Boolean activo = true;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date creacion;
+    
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date acceso;
+    
     public Usuario() {
+        this.creacion = Calendar.getInstance().getTime();
+        this.acceso = this.creacion;
     }
 
     public Usuario(String login, String email, String nombre) {
         this.login = login;
         this.email = email;
         this.nombre = nombre;
+        this.creacion = Calendar.getInstance().getTime();
+        this.acceso = this.creacion;        
     }
 
     public Long getId() {
@@ -100,6 +115,23 @@ public class Usuario implements Serializable {
         this.activo = false;
     }
 
+    public Date getCreacion() {
+        return creacion;
+    }
+
+    public void setCreacion(Date creacion) {
+        this.creacion = creacion;
+    }
+
+    public Date getAcceso() {
+        return acceso;
+    }
+
+    public void setAcceso(Date acceso) {
+        this.acceso = acceso;
+    }
+
+    
     @Override
     public int hashCode() {
         if (id != null) {

@@ -11,24 +11,23 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table("CLIENTE")
+@Table(name = "CLIENTE")
 public class Cliente implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @ManyToOne
-    @JoinColumn("usuario_id")
+    @JoinColumn(name = "usuario_id")
     private Usuario propietario;
-    
+
     private String nombre;
     private String nif;
     private Direccion direccion;
     private String telefono;
     private String email;
     private String cuentaBancaria;
-       
 
     public Cliente() {
     }
@@ -58,7 +57,6 @@ public class Cliente implements Serializable {
     public void setPropietario(Usuario propietario) {
         this.propietario = propietario;
     }
-
 
     public String getNombreComercial() {
         return nombre;
@@ -114,17 +112,17 @@ public class Cliente implements Serializable {
             return Objects.hashCode(this.id);
         } else {
             return hashCodePorContenido();
-        }        
+        }
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (id !=null) {
+        if (id != null) {
             return equalsPorId(obj);
         } else {
             return equalsPorContenido(obj);
         }
-    }    
+    }
 
     public boolean equalsPorId(Object obj) {
         if (this == obj) {
@@ -169,7 +167,5 @@ public class Cliente implements Serializable {
         }
         return true;
     }
-    
-    
-    
+
 }

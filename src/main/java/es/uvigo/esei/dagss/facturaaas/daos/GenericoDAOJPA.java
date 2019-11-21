@@ -11,7 +11,7 @@ import javax.persistence.criteria.CriteriaQuery;
 @Stateless
 public class GenericoDAOJPA<T, K> implements GenericoDAO<T, K> {
 
-    @PersistenceContext("facturaaas_PU")
+    @PersistenceContext(name = "facturaaas_PU")
     protected EntityManager em;
     protected Class<T> claseEntidad;
 

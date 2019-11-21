@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table("FORMA_PAGO")
+@Table(name = "FORMA_PAGO")
 public class FormaPago implements Serializable {
 
     @Id
@@ -69,7 +69,6 @@ public class FormaPago implements Serializable {
         this.activo = activo;
     }
 
-
     public void activar() {
         this.activo = true;
     }
@@ -77,7 +76,7 @@ public class FormaPago implements Serializable {
     public void desactivar() {
         this.activo = false;
     }
-    
+
     @Override
     public int hashCode() {
         if (id != null) {
@@ -94,7 +93,7 @@ public class FormaPago implements Serializable {
         } else {
             return equalsPorContenido(obj);
         }
-    }   
+    }
 
     public int hashCodePorContenido() {
         int hash = 3;
@@ -104,7 +103,6 @@ public class FormaPago implements Serializable {
         hash = 97 * hash + Objects.hashCode(this.activo);
         return hash;
     }
-
 
     public boolean equalsPorId(Object obj) {
         if (this == obj) {
@@ -153,6 +151,5 @@ public class FormaPago implements Serializable {
     public String toString() {
         return "FormaPago{" + "id=" + id + ", nombre=" + nombre + ", numeroPagos=" + numeroPagos + ", periodicidad=" + periodicidad + ", activo=" + activo + '}';
     }
-    
-    
+
 }

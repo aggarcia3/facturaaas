@@ -14,7 +14,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table("DATOS_FACTURACION")
+@Table(name="DATOS_FACTURACION")
 public class DatosFacturacion implements Serializable {
 
     @Id
@@ -22,7 +22,7 @@ public class DatosFacturacion implements Serializable {
     private Long id;
     
     @OneToOne
-    @JoinColumn("usuario_id")
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
     
     private String nombreComercial;
