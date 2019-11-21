@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:b="http://bootsfaces.net/ui">
+    <ui:composition>
+        <b:navbarLinks>
+            <b:navCommandLink value="Inicio"   outcome="/usaurio/index" iconAwesome="home"/>
+            <b:navCommandLink value="Mis Clientes" outcome="/usuario/clientes/listado.xhtml" iconAwesome="users"/>
+            <b:navCommandLink value="Mis Facturas" outcome="/usuario/facturas/listado.xhtml" iconAwesome="file-invoice"/>
+            <b:navCommandLink value="Mis Pagos" outcome="/usuario/pagos/listado.xhtml" iconAwesome="fa-money-bill-alt"/>
+
+            <b:navCommandLink rendered="#{autenticacionControlador.usuarioAutenticado}"
+                              value="Desconectar" 
+                              action="#{autenticacionControlador.doLogOut()}"
+                              iconAwesome="sign-out"/>
+
+        </b:navbarLinks>
+    </ui:composition>
+</html>
+
