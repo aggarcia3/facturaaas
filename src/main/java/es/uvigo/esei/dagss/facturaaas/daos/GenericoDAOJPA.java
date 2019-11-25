@@ -2,17 +2,16 @@ package es.uvigo.esei.dagss.facturaaas.daos;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
-import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 
-@Stateless
-public class GenericoDAOJPA<T, K> implements GenericoDAO<T, K> {
+public abstract class GenericoDAOJPA<T, K> implements GenericoDAO<T, K> {
 
-    @PersistenceContext(name = "facturaaas_PU")
+    @PersistenceContext(unitName = "facturaaas_PU")
     protected EntityManager em;
+    
     protected Class<T> claseEntidad;
 
     private void establecerClaseEntidad() {

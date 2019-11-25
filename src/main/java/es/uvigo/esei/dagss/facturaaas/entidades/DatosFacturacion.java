@@ -22,7 +22,7 @@ public class DatosFacturacion implements Serializable {
     private Long id;
     
     @OneToOne
-    @JoinColumn(name = "usuario_id")
+    @JoinColumn(name = "USUARIO_ID")
     private Usuario usuario;
     
     private String nombreComercial;

@@ -19,7 +19,7 @@ public class Cliente implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_id")
+    @JoinColumn(name = "USUARIO_ID")
     private Usuario propietario;
 
     private String nombre;

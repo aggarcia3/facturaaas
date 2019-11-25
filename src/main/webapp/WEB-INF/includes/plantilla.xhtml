@@ -12,11 +12,10 @@
     </h:head>
 
     <h:body>
-        <b:navBar brand="FACTURAaaS"  position="top" sticky="false" inverse="true">
-            <h:form id="formMenu">
-                <ui:insert name="menu"/>                
-            </h:form>
-        </b:navBar>
+        <h:form id="formMenu">
+            <ui:insert name="menu"/>                
+        </h:form>
+
         <b:container fluid="true">
             <b:row>
                 <ui:insert name="tituloPagina"/> 
@@ -27,7 +26,7 @@
                 <ui:insert name="contenido"/>
             </b:row>
         </b:container>
-        
+
         <b:well>
             <h3> <h:outputText value="DAGSS, 2019/20"/> </h3>
         </b:well>

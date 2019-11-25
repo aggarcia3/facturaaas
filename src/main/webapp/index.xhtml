@@ -7,21 +7,20 @@
                 xmlns:b="http://bootsfaces.net/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-
-
+    <ui:define name="menu">
+        <ui:include src="/WEB-INF/includes/menu-visitante.xhtml"/>
+    </ui:define>
     <ui:define name="contenido">
 
         <b:form id="loginForm" >  
             <b:container>
-                <b:row>
-                    <b:messages id="messages" show-icon="true" show-detail="true" offset="2" span="8"/>
-                </b:row>
+
                 <b:row>
                     <b:column offset="2" span="8">
                         <b:panel title="FACTURAaaS Login" look="primary" collapsible="false">
                             <b:column>
-                                <h:outputLabel for="email" value="User e-email"/>
-                                <b:inputText id="email" title="User e-email" value="#{loginController.email}"/>
+                                <h:outputLabel for="email" value="Login"/>
+                                <b:inputText id="email" title="Login" value="#{loginController.login}"/>
 
                                 <h:outputLabel for="passwd" value="Password"/>
                                 <b:inputSecret id="passwd" title="Password" value="#{loginController.password}"/>

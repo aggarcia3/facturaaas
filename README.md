@@ -22,7 +22,13 @@ Proyecto Java EE 7
    pushd
    ```
 
-* Crear BD `facturaaas` en MySQL
+* Descargar copia del proyecto desde GitHub
+   ```
+   git clone https://github.com/dagss2019/facturaaas.git
+   ```
+
+
+* Crear base de datos `facturaaas` en MySQL
    ```
    $ mysql -u root -p    [pedirá la contraseña de MySQL]
 
@@ -37,8 +43,20 @@ Proyecto Java EE 7
    mysql> set @@session.time_zone = '+00:00';
    ```
 
-* Descargar copia del proyecto desde GitHub
-   ```
-   git clone https://github.com/dagss2019/facturaaas.git
-   ```
+* Crear tabla de usuarios y cargar usuarios iniciales
+
+  * Desde el directorio `facturaaas`
+  
+  ```
+  cd facturaaas
+
+  mysql -u facturaaas -p -D facturaaas < sql/usuarios_iniciales.sql
+                <pedirá la contraseña facturaaaas>
+  ```
+  
+* Abrir el proyecto y ejecutarlo
+En el primer despligue se generarán el resto de tablas de la base de datos.
+* En caso de incorporar nuevas entidades, también se generán sus respectivas tablas una vez desplegada la nueva versión de la aplicación.
+* Dependiendo de las modificacionesr realiazdas sobre entidades existentes (bien las de partida o las incorporadas posteriormente) puede requerirse eliminar manualmente las 
+tablas implicadas (o la BD completa) para que el motor JPA vuelva a generarlas.
 

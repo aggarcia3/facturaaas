@@ -1,10 +1,10 @@
 package es.uvigo.esei.dagss.facturaaas.entidades;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -24,20 +24,24 @@ public class Usuario implements Serializable {
     private Long id;
 
     private String login;
+
     private String password;
+
     private String email;
+    
     private String nombre;
 
     @Enumerated(EnumType.STRING)
     private RolUsuario rol = RolUsuario.USUARIO;
+    
     private Boolean activo = true;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date creacion;
-    
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date acceso;
-    
+
     public Usuario() {
         this.creacion = Calendar.getInstance().getTime();
         this.acceso = this.creacion;
@@ -48,7 +52,7 @@ public class Usuario implements Serializable {
         this.email = email;
         this.nombre = nombre;
         this.creacion = Calendar.getInstance().getTime();
-        this.acceso = this.creacion;        
+        this.acceso = this.creacion;
     }
 
     public Long getId() {
@@ -131,19 +135,18 @@ public class Usuario implements Serializable {
         this.acceso = acceso;
     }
 
-    
     @Override
     public int hashCode() {
         if (id != null) {
             return Objects.hashCode(this.id);
         } else {
             return hashCodePorContenido();
-        }        
+        }
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (id !=null) {
+        if (id != null) {
             return equalsPorId(obj);
         } else {
             return equalsPorContenido(obj);
@@ -188,7 +191,6 @@ public class Usuario implements Serializable {
         }
         return true;
     }
-          
 
     private boolean equalsPorId(Object obj) {
         if (this == obj) {
@@ -207,12 +209,9 @@ public class Usuario implements Serializable {
         return true;
     }
 
-
-
     @Override
     public String toString() {
         return "Usuario{" + "id=" + id + ", login=" + login + ", nombre=" + nombre + ", rol=" + rol + ", activo=" + activo + '}';
     }
 
-    
 }
