@@ -51,13 +51,14 @@ public class TipoIVA implements Serializable {
         this.porcentaje = porcentaje;
     }
 
-    public Boolean isActivo() {
+    public Boolean getActivo() {
         return activo;
     }
 
     public void setActivo(Boolean activo) {
         this.activo = activo;
     }
+
 
     public void activar() {
         this.activo = true;

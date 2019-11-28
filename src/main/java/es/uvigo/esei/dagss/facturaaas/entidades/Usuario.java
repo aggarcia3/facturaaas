@@ -103,7 +103,7 @@ public class Usuario implements Serializable {
         this.rol = rol;
     }
 
-    public Boolean isActivo() {
+    public Boolean getActivo() {
         return activo;
     }
 

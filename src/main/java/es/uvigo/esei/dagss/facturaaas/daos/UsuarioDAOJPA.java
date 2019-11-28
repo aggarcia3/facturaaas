@@ -2,7 +2,6 @@ package es.uvigo.esei.dagss.facturaaas.daos;
 
 import es.uvigo.esei.dagss.facturaaas.entidades.Usuario;
 import java.util.List;
-import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.TypedQuery;
 
@@ -25,6 +24,18 @@ public class UsuarioDAOJPA extends GenericoDAOJPA<Usuario, Long> implements Usua
         TypedQuery<Usuario> query = em.createQuery("SELECT u FROM Usuario AS u WHERE u.nombre LIKE :patron", Usuario.class);
         query.setParameter("patron", "%"+patron+"%");
         return query.getResultList();
+    }
+
+    @Override
+    public Usuario activar(Usuario usuario) {
+        usuario.activar();
+        return this.actualizar(usuario);
+    }
+
+    @Override
+    public Usuario desactivar(Usuario usuario) {
+        usuario.desactivar();
+        return this.activar(usuario);
     }
 
 }
