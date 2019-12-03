@@ -58,13 +58,14 @@ public class Cliente implements Serializable {
         this.propietario = propietario;
     }
 
-    public String getNombreComercial() {
+    public String getNombre() {
         return nombre;
     }
 
-    public void setNombreComercial(String nombreComercial) {
-        this.nombre = nombreComercial;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
+
 
     public String getNif() {
         return nif;
