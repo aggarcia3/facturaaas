@@ -31,6 +31,7 @@ public class Factura implements Serializable {
     @NotNull
     private String ejercicio;
     @NotNull
+    @ManyToOne
     private Cliente cliente;
     @Enumerated(EnumType.STRING)
     @NotNull
@@ -47,6 +48,22 @@ public class Factura implements Serializable {
     private List<LineaFactura> lineas;
     @OneToMany(mappedBy = "factura", cascade = CascadeType.ALL)
     private List<Pago> pagos;
+
+    public List<LineaFactura> getLineas() {
+        return lineas;
+    }
+
+    public void setLineas(List<LineaFactura> lineas) {
+        this.lineas = lineas;
+    }
+
+    public List<Pago> getPagos() {
+        return pagos;
+    }
+
+    public void setPagos(List<Pago> pagos) {
+        this.pagos = pagos;
+    }
 
     public Long getId() {
         return id;
