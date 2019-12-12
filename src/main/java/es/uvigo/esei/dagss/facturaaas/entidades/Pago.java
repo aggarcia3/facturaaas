@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -23,15 +24,20 @@ import javax.persistence.TemporalType;
 public class Pago implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private long id;
+    @NotNull
+    private Long id;
     @ManyToOne
     @JoinColumn(name="FACTURA_ID")
+    @NotNull
     private Factura factura;
     
     @Enumerated(EnumType.STRING)
+    @NotNull
     private EstadoPago estado;
-    private double importe;
+    @NotNull
+    private Double importe;
     @Temporal(TemporalType.TIMESTAMP)
+    @NotNull
     private Date fechaVencimiento;
 
     public long getId() {

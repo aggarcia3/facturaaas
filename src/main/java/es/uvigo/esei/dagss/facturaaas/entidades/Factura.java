@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -22,34 +23,33 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name="FACTURA")
-public class Factura implements Serializable{
+public class Factura implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nombre;
+    @NotNull
     private String ejercicio;
+    @NotNull
     private Cliente cliente;
     @Enumerated(EnumType.STRING)
+    @NotNull
     private EstadoFactura estado;
     @ManyToOne
+    @NotNull
     private FormaPago formaPago;
     @Temporal(TemporalType.TIMESTAMP)
+    @NotNull
     private Date fechaEmision;
+    @NotNull
     private String comentarios;
     @OneToMany(mappedBy = "factura", cascade = CascadeType.ALL)
     private List<LineaFactura> lineas;
+    @OneToMany(mappedBy = "factura", cascade = CascadeType.ALL)
+    private List<Pago> pagos;
 
     public Long getId() {
         return id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
     }
 
     public String getEjercicio() {

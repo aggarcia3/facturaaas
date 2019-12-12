@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -24,14 +25,20 @@ public class LineaFactura implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull
     private String concepto;
-    private int cantidad;
-    private double precioUnitario;
-    private float porcentajeDescuento;
+    @NotNull
+    private Integer cantidad = 1;
+    @NotNull
+    private Double precioUnitario;
+    @NotNull
+    private Float porcentajeDescuento;
     @ManyToOne
+    @NotNull
     private TipoIVA tipoIva;
     @ManyToOne
     @JoinColumn(name = "FACTURA_ID")
+    @NotNull
     private Factura factura;
 
     public Long getId() {

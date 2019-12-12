@@ -13,7 +13,6 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "CLIENTE")
 public class Cliente implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
