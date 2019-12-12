@@ -36,9 +36,9 @@
 
 ### Contenidos de los documentos entregables (hasta 22/1/2020)
 
-##### Informe de grupo
+#### Informe de grupo
 
-Material a entregar (en un único ZIP)
+##### Material a entregar (en un único ZIP)
 
 * Carpeta con código fuente del proyecto  (haced antes `mvn clean` para que sólo se incluya el código fuente)
 * Memoria de grupo (ver estructura propuesta)
@@ -46,7 +46,7 @@ Material a entregar (en un único ZIP)
 Al ser un informe de grupo, bastará con que lo suba a FAITIC uno de los miembros del grupo
 
 
-Estructura propuesta para la memoria de grupo (hasta 4-5 páginas)
+##### Estructura propuesta para la memoria de grupo (hasta 4-5 páginas)
 
 1. Breve descripción general del proyecto
 2. Descripción de las funcionalidades finalmente cubiertas por el grupo
@@ -57,7 +57,7 @@ Estructura propuesta para la memoria de grupo (hasta 4-5 páginas)
 
 
 
-##### Informe individual
+#### Informe individual
 
 Revisión crítica de la arquitectura del proyecto Java EE
 
