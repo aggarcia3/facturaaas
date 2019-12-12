@@ -38,16 +38,6 @@ public class Factura implements Serializable{
     private Date fechaEmision;
     private String comentarios;
 
-    public Factura(String nombre, String ejercicio, Cliente cliente, EstadoFactura estado, FormaPago formaPago, Date fechaEmision, String comentarios) {
-        this.nombre = nombre;
-        this.ejercicio = ejercicio;
-        this.cliente = cliente;
-        this.estado = estado;
-        this.formaPago = formaPago;
-        this.fechaEmision = fechaEmision;
-        this.comentarios = comentarios;
-    }
-
     public Long getId() {
         return id;
     }
@@ -107,10 +97,4 @@ public class Factura implements Serializable{
     public void setComentarios(String comentarios) {
         this.comentarios = comentarios;
     }
-
-    
-    
-    
-    
-    
 }

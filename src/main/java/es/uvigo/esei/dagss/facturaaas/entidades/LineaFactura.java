@@ -34,17 +34,6 @@ public class LineaFactura implements Serializable{
     @JoinColumn(name = "FACTURA_ID")
     private Factura factura;
 
-    public LineaFactura(String concepto, int cantidad, double precioUnitario, float porcentajeDescuento, TipoIVA tipoIva, Factura factura) {
-        this.concepto = concepto;
-        this.cantidad = cantidad;
-        this.precioUnitario = precioUnitario;
-        this.porcentajeDescuento = porcentajeDescuento;
-        this.tipoIva = tipoIva;
-        this.factura = factura;
-    }
-    
-     
-
     public Long getId() {
         return id;
     }
