@@ -1,9 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package es.uvigo.esei.dagss.facturaaas.entidades;
+
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Entity;
@@ -17,12 +13,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
 /**
  *
  * @author alex
  */
-public class Pago implements Serializable{
-    
+@Entity
+@Table(name="PAGO")
+public class Pago implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private long id;
@@ -35,13 +33,6 @@ public class Pago implements Serializable{
     private double importe;
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaVencimiento;
-
-    public Pago(Factura factura, EstadoPago estado, double importe, Date fechaVencimiento) {
-        this.factura = factura;
-        this.estado = estado;
-        this.importe = importe;
-        this.fechaVencimiento = fechaVencimiento;
-    }
 
     public long getId() {
         return id;
@@ -78,9 +69,4 @@ public class Pago implements Serializable{
     public void setFechaVencimiento(Date fechaVencimiento) {
         this.fechaVencimiento = fechaVencimiento;
     }
-
-    
-    
-    
-    
 }

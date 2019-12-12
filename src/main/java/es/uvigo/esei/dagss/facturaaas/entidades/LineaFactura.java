@@ -5,7 +5,6 @@
  */
 package es.uvigo.esei.dagss.facturaaas.entidades;
 import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -85,7 +84,4 @@ public class LineaFactura implements Serializable{
     public void setFactura(Factura factura) {
         this.factura = factura;
     }
-
-    
-    
 }
