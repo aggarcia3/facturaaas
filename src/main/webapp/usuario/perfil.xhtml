@@ -8,7 +8,7 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"  
                 xmlns:o="http://omnifaces.org/ui">
 
-    <o:importConstants type="es.uvigo.esei.dagss.facturaaas.entidades.RolUsuario" />
+    <o:importConstants type="es.uvigo.esei.dagss.facturaaas.entidades.TipoFacturacion" />
 
     <ui:define name="menu">
         <ui:include src="/WEB-INF/includes/menu-usuario.xhtml"/>
@@ -20,12 +20,13 @@
 
     <ui:define name="contenido">
         <b:container fluid="true">
-            <h:form>
-                <b:tabView activeIndex="0">
-                    <b:tab title="Datos de Usuario">                    
+            <b:tabView activeIndex="0">
+                <b:tab title="Datos de Usuario">   
+                    <h:form>
                         <b:panel title="Editar Usuario" span="4"
                                  id="panelDatosUsuario"
                                  collapsible="false">
+
                             <b:panelGrid columns="2" col-spans="3,9">
                                 <h:outputLabel value="Login" />
                                 <h:outputText value="#{perfilController.usuarioActual.login}" />
@@ -55,9 +56,11 @@
                                              actionListener="#{perfilController.doGuardarDatosUsuario()}"  />
                             <b:commandButton value="Cancelar" immediate="true"
                                              ajax="true" process="@form" update=":mensajesGlobal  panelDatosUsuario" 
-                                             actionListener="#{perfilController.doCancelarDatosUsuario()}" />
+                                             actionListener="#{perfilController.doCancelarDatosUsuario()}" />                        
                         </b:panel>
+                    </h:form>
 
+                    <h:form>
                         <b:panel title="Cambiar Password" offset="1" span="4"
                                  id="panelPassword"
                                  collapsible="false">
@@ -71,11 +74,13 @@
                             <b:commandButton value="Cambiar Password" 
                                              ajax="true" process="@form" update=" :mensajesGlobal panelPassword" 
                                              actionListener="#{perfilController.doCambiarPassword()}"  />
-
                         </b:panel>
-                    </b:tab>
+                    </h:form>
+                </b:tab>
 
-                    <b:tab title="Datos de Facturación">
+                <b:tab title="Datos de Facturación">
+                    <h:form>
+
                         <b:panel title="Editar Datos de Facturacion" span="8"
                                  id="panelDatosFacturacion"
                                  collapsible="false">
@@ -140,15 +145,14 @@
 
                             <b:commandButton value="Guardar Cambios" 
                                              ajax="true" process="@form" update=" :mensajesGlobal panelDatosFacturacion" 
-                                             actionListener="#{perfilController.doGuardarDatosUsuario()}"  />
+                                             actionListener="#{perfilController.doGuardarDatosFacturacion()}"  />
                             <b:commandButton value="Cancelar" immediate="true"
                                              ajax="true" process="@form" update=":mensajesGlobal  panelDatosFacturacion" 
-                                             actionListener="#{perfilController.doCancelarDatosUsuario()}" />
+                                             actionListener="#{perfilController.doCancelarDatosFacturacion()}" />
                         </b:panel>
-
-                    </b:tab>
-                </b:tabView>
-            </h:form>
+                    </h:form>
+                </b:tab>
+            </b:tabView>
         </b:container>
     </ui:define>    
 

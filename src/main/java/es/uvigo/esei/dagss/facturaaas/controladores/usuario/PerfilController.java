@@ -1,7 +1,6 @@
 package es.uvigo.esei.dagss.facturaaas.controladores.usuario;
 
 import es.uvigo.esei.dagss.facturaaas.controladores.AutenticacionController;
-import es.uvigo.esei.dagss.facturaaas.controladores.administrador.FormasPagoController;
 import es.uvigo.esei.dagss.facturaaas.daos.DatosFacturacionDAO;
 import es.uvigo.esei.dagss.facturaaas.daos.FormaPagoDAO;
 import es.uvigo.esei.dagss.facturaaas.daos.TipoIVADAO;
