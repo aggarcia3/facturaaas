@@ -69,7 +69,7 @@
                                 <b:inputSecret id="password1" value="#{perfilController.password1}" required="true" requiredMessage="Debe indicarse el nuevo password"/>
 
                                 <h:outputLabel value="Repetir Password" for="password2"/>
-                                <b:inputSecret id="password" value="#{perfilController.password2}" required="true" requiredMessage="Debe repetirse el nuevo password"/>
+                                <b:inputSecret id="password2" value="#{perfilController.password2}" required="true" requiredMessage="Debe repetirse el nuevo password"/>
                             </b:panelGrid>
                             <b:commandButton value="Cambiar Password" 
                                              ajax="true" process="@form" update=" :mensajesGlobal panelPassword" 
@@ -87,7 +87,7 @@
                             <b:panelGrid columns="2"> 
                                 <b:panelGrid columns="2" col-spans="4,8">
                                     <h:outputLabel value="Nombre Comercial" for="nombreComercial" />
-                                    <b:inputText id="nombrecomercial" value="#{perfilController.datosFacturacionActual.nombreComercial}" 
+                                    <b:inputText id="nombreComercial" value="#{perfilController.datosFacturacionActual.nombreComercial}" 
                                                  required="true" requiredMessage="Debe indicarse el nombre comercial"/>
 
                                     <h:outputLabel value="NIF" for="nif"/>
