@@ -29,6 +29,7 @@ public class LineaFactura implements Serializable{
     private int cantidad;
     private double precioUnitario;
     private float porcentajeDescuento;
+    @ManyToOne
     private TipoIVA tipoIva;
     @ManyToOne
     @JoinColumn(name = "FACTURA_ID")
