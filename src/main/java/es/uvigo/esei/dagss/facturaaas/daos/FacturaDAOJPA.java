@@ -7,14 +7,17 @@ import javax.ejb.Stateless;
 import javax.persistence.TypedQuery;
 
 /**
+ * Implementa el contrato que debe de cumplir un DAO de Facturas.
  *
  * @author Alejandro González García
  */
 @Stateless
-public class FacturaDAOJPA extends GenericoDAOJPA<Factura, Integer> implements FacturaDAO {
+public class FacturaDAOJPA extends GenericoDAOJPA<Factura, Long> implements FacturaDAO {
     @Override
-    public List<Factura> buscarPorCliente(Cliente cliente) {
-        final TypedQuery<Factura> query = em.createQuery("SELECT f FROM Factura AS f WHERE f.cliente.id = :idCliente", Factura.class);
+    public List<Factura> buscarPorCliente(final Cliente cliente) {
+        final TypedQuery<Factura> query = em.createQuery(
+            "SELECT f FROM Factura AS f WHERE f.cliente.id = :idCliente", Factura.class
+        );
         query.setParameter("idCliente", cliente.getId());
 
         return query.getResultList();

@@ -16,7 +16,6 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 /**
- *
  * @author alex
  */
 @Entity
