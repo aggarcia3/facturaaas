@@ -60,3 +60,21 @@ En el primer despligue se generarán el resto de tablas de la base de datos.
 * Dependiendo de las modificacionesr realiazdas sobre entidades existentes (bien las de partida o las incorporadas posteriormente) puede requerirse eliminar manualmente las 
 tablas implicadas (o la BD completa) para que el motor JPA vuelva a generarlas.
 
+# Dependencias (ver `pom.xml`)
+
+* **Bootsfaces**: biblioteca de componentes JSF basada en Bootstrap
+ 
+  URL: [https://www.bootsfaces.net/](https://www.bootsfaces.net/)
+
+* **Omnifaces**: colección de utilidades para simplificar el desarrollo de aplicaciones JSP
+
+  URL: [http://omnifaces.org/](http://omnifaces.org/)
+
+  Elementos utilizados (_converters_)
+
+  * [SelectItemsConverter](http://showcase.omnifaces.org/converters/SelectItemsConverter): conversor empleado en los componentes `<b:selectOneMnu>`
+  * [GenericEnumConverter](http://showcase.omnifaces.org/converters/GenericEnumConverter): conversor empleado para presentar los Enum del proyecto
+
+* **Jsypt**: biblioteca para dar soporte la gestión de contraseñas hasheadas
+
+  URL: [http://www.jasypt.org/](http://www.jasypt.org/)
