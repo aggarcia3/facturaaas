@@ -15,8 +15,74 @@
     </ui:define>
 
     <ui:define name="contenido">
-        <h2>Historia de usuario H14</h2>
-    </ui:define>  
+        <h:form id="formularioListado">     
+            <b:container fluid="true">
+                <b:panel title="Listado de Facturas" collapsible="false" offset="1" span="9">
+                    <b:panelGrid columns="4" col-spans="6,2,2,2">
+                        <b:selectOneMenu value="#{facturasController.clienteSeleccionado}" ajax="true" >
+                            <f:converter converterId="omnifaces.GenericEnumConverter" />
+                            <f:selectItems value="#{facturasController.clientes}"/>
+                        </b:selectOneMenu>
+                        <b:commandButton value="Buscar Todas"  
+                                         actionListener="#{clientesController.doBuscarTodos()}"
+                                         update=":formularioListado:tablaListado :mensajesGlobal"/>
+                    </b:panelGrid>
+
+
+                    <b:dataTable id="tablaListado"  class="tablaListadoClass"
+                                 value="#{facturasController.facturas}"
+                                 var="cliente" 
+                                 striped="true" 
+                                 page-length="10" searching="false">
+                        <b:dataTableColumn label="Id">
+                            <h:outputText value="#{factura.id}"/>
+                        </b:dataTableColumn>
+
+                        <b:dataTableColumn label="Ejercicio">
+                            <h:outputText value="#{factura.ejercicio}" />
+                        </b:dataTableColumn>                    
+
+                        <b:dataTableColumn label="Cliente">
+                            <h:outputText value="#{factura.cliente}" />
+                        </b:dataTableColumn>                  
+
+                        <b:dataTableColumn label="Estado">
+                            <h:outputText value="#{factura.estado}, #{cliente.direccion.localidad} (#{cliente.direccion.provincia})" />
+                        </b:dataTableColumn>                    
+
+                        <b:dataTableColumn label="Forma de pago" >
+                            <h:outputText value="#{factura.formaPago}" />
+                        </b:dataTableColumn>
+
+                        <b:dataTableColumn label="Fecha emision" >
+                            <h:outputText value="#{factura.fechaEmision}" />
+                        </b:dataTableColumn>
+                        
+                        <b:dataTableColumn label="Importe" >
+                            <h:outputText value="#{factura.importe}" />
+                        </b:dataTableColumn>
+                        
+                        <b:dataTableColumn label="IVA" >
+                            <h:outputText value="#{factura.iva}" />
+                        </b:dataTableColumn>
+
+
+                         
+                    </b:dataTable>
+
+                    <f:facet name="footer">
+                        <b:commandButton id="botonNuevo" icon-awesome="plus" value="Crear Factura" tooltip="Nuevo Factura" ajax="true"
+                                         actionListener="#{clientesController.doNuevo()}" 
+                                         update=":formularioEditar"
+                                         oncomplete="$('.modal-editar-class').modal('show')"/>
+                    </f:facet>
+                </b:panel>
+            </b:container>
+        </h:form>  
+        
+        <ui:include src="fragmento-editar.xhtml"/>
+
+    </ui:define>
     
     
     
