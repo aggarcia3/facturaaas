@@ -22,15 +22,15 @@
                         <b:selectOneMenu value="#{facturasController.clienteSeleccionado}" ajax="true" >
                             <f:selectItems value="#{facturasController.clientes}"/>
                         </b:selectOneMenu>
-                        <b:commandButton value="Buscar Todas"  
-                                         actionListener="#{clientesController.doBuscarTodos()}"
+                        <b:commandButton value="Buscar facturas"  
+                                         actionListener="#{facturasController.doBuscarFacturasCliente()}"
                                          update=":formularioListado:tablaListado :mensajesGlobal"/>
                     </b:panelGrid>
 
 
                     <b:dataTable id="tablaListado"  class="tablaListadoClass"
                                  value="#{facturasController.facturas}"
-                                 var="cliente" 
+                                 var="factura" 
                                  striped="true" 
                                  page-length="10" searching="false">
                         <b:dataTableColumn label="Id">
@@ -46,7 +46,7 @@
                         </b:dataTableColumn>                  
 
                         <b:dataTableColumn label="Estado">
-                            <h:outputText value="#{factura.estado}, #{cliente.direccion.localidad} (#{cliente.direccion.provincia})" />
+                            <h:outputText value="#{factura.estado}" />
                         </b:dataTableColumn>                    
 
                         <b:dataTableColumn label="Forma de pago" >
@@ -58,14 +58,17 @@
                         </b:dataTableColumn>
                         
                         <b:dataTableColumn label="Importe" >
-                            <h:outputText value="#{factura.importe}" />
+                            <h:outputText value="#{factura.getImporte()}" />
                         </b:dataTableColumn>
                         
-                        <b:dataTableColumn label="IVA" >
-                            <h:outputText value="#{factura.iva}" />
-                        </b:dataTableColumn>
-
-
+                        <b:dataTableColumn label="" orderable="false">
+                            <b:commandButton id="botonEditar" icon-awesome="pencil" tooltip="Editar" ajax="true" 
+                                             actionListener="#{facturasController.doEditar(factura)}" 
+                                             update=":formularioEditar"/>
+                            <b:commandButton id="botonBorrar" icon-awesome="trash" tooltip="Desactivar" ajax="true" 
+                                             actionListener="#{facturasController.doEliminar(factura)}"
+                                             update="@(.tablaListadoClass)"/>
+                        </b:dataTableColumn>  
                          
                     </b:dataTable>
 
@@ -73,14 +76,112 @@
                         <b:commandButton id="botonNuevo" icon-awesome="plus" value="Crear Factura" tooltip="Nuevo Factura" ajax="true"
                                          actionListener="#{facturasController.doNuevo()}" 
                                          update=":formularioEditar"
-                                         oncomplete="$('.modal-editar-class').modal('show')"/>
+                                         />
                     </f:facet>
                 </b:panel>
             </b:container>
         </h:form>  
         
-        <ui:include src="fragmento-editar.xhtml"/>
+        <h:form id="formularioEditar" >
+            
+                <b:container fluid="true">
+                    <b:panel title="Crear/Editar Factura" offset="3" span="5"
+                             rendered="#{not empty facturasController.facturaActual}" 
+                             collapsible="false">
+                        <b:panelGrid columns="2" col-spans="4,8">
+                            <h:outputLabel value="Ejercicio" for="ejercicio"/>
+                            <b:inputText id="ejercicio" value="#{facturasController.facturaActual.ejercicio}" required="true" requiredMessage="Debe indicarse el nombre del cliente"/>
+                            
+                            <h:outputLabel value="Cliente" for="cliente"/>    
+                            <b:selectOneMenu value="#{facturasController.facturaActual.cliente}" ajax="true" id="cliente">
+                            <f:selectItems value="#{facturasController.clientes}"/>
+                            </b:selectOneMenu>
+                            
+                            <h:outputLabel value="Fecha de emision" />
+                            <b:datepicker value="#{facturasController.facturaActual.fechaEmision}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" locale="es_ES" timeZone="Europe/Madrid"/>
+                            </b:datepicker>
+                            
+                            <h:outputLabel value="Forma de pago" for="formapago"/>    
+                            <b:selectOneMenu value="#{facturasController.facturaActual.formaPago}" ajax="true" id="formapago">
+                            <f:selectItems value="#{facturasController.formasDePago}"/>
+                            </b:selectOneMenu>
+                            
+                            <h:outputLabel value="Estado" for="estado"/>    
+                            <b:selectOneMenu value="#{facturasController.facturaActual.estado}" ajax="true" id="estado">
+                            <f:converter converterId="omnifaces.GenericEnumConverter" />
+                            <f:selectItems value="#{facturasController.estadosPosibles}"/>
+                            </b:selectOneMenu>
+                            
+                            <h:outputLabel value="Comentarios" for="comentarios"/>
+                            <b:inputText id="comentarios" value="#{facturasController.facturaActual.comentarios}"  />
 
+                            <b:dataTable id="tablaListadoLineas"  class="tablaListadoClass"
+                                         value="#{facturasController.lineasDeFacturaActual}"
+                                 var="lineadefactura" 
+                                 striped="true" 
+                                 page-length="10" searching="false">
+                                <b:dataTableColumn label="Id">
+                                    <h:outputText value="#{lineadefactura.id}"/>
+                                </b:dataTableColumn>
+
+                                <b:dataTableColumn label="Concepto">
+                                    <h:outputText value="#{lineadefactura.concepto}" />
+                                </b:dataTableColumn>                    
+
+                                <b:dataTableColumn label="Cantidad">
+                                    <h:outputText value="#{lineadefactura.cantidad}" />
+                                </b:dataTableColumn>                  
+
+                                <b:dataTableColumn label="Precio Unitario">
+                                    <h:outputText value="#{lineadefactura.precioUnitario}" />
+                                </b:dataTableColumn>                    
+
+                                <b:dataTableColumn label="Porcentaje de descuento" >
+                                    <h:outputText value="#{lineadefactura.porcentajeDescuento}" />
+                                </b:dataTableColumn>
+                                
+                                <b:dataTableColumn label="Importe" >
+                                    <h:outputText value="#{(lineadefactura.cantidad * lineadefactura.precioUnitario)}" />
+                                </b:dataTableColumn>
+                                
+                                <b:dataTableColumn label="">
+                                
+                                    <b:commandButton id="botonEditar" icon-awesome="pencil" tooltip="Editar linea de factura" immediate="true" ajax="true"
+                                                     actionListener="#{facturasController.doEditarLinea(lineadefactura)}" 
+                                                    update=":formularioEditarLinea"
+                                                    oncomplete="$('.modal-editar-class-linea').modal('show')"/>
+                                    <b:commandButton id="botonBorrar" icon-awesome="trash" tooltip="Desactivar" ajax="true" 
+                                                     actionListener="#{facturasController.doEliminarLinea(lineadefactura)}"
+                                                     update="@(.tablaListadoClass)"/>
+                                </b:dataTableColumn>
+
+                            </b:dataTable>
+                            
+                            <b:commandButton id="botonNuevo" icon-awesome="plus" value="Crear Linea" tooltip="Nueva linea de factura" immediate="true"
+                                             actionListener="#{facturasController.doNuevaLinea()}" 
+                                            update=":formularioEditarLinea"
+                                            oncomplete="$('.modal-editar-class-linea').modal('show')"/>
+                            
+                        </b:panelGrid>
+
+                        <b:commandButton value="Guardar Cambios" 
+                                         ajax="true" process="@form" update=":formularioListado:tablaListado :mensajesGlobal :formularioEditar" 
+                                         actionListener="#{facturasController.doGuardarEditado()}"/>
+
+                        <b:commandButton value="Cancelar" immediate="true" process="@form" ajax="true"
+                                         update=":formularioListado:tablaListado :mensajesGlobal :formularioEditar"
+                                         actionListener="#{facturasController.doCancelarEditado()}"
+                                         
+                                        />
+                        
+                    </b:panel>
+                </b:container>
+          
+        </h:form>
+
+        <ui:include src="fragmento-editar.xhtml"/>
+        
     </ui:define>
     
     

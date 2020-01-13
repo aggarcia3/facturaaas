@@ -115,4 +115,14 @@ public class Factura implements Serializable {
     public void setComentarios(String comentarios) {
         this.comentarios = comentarios;
     }
+    
+    public double getImporte()
+    {
+        double importe = 0;
+        for(LineaFactura l : this.lineas)
+        {
+            importe += l.getImporte();
+        }
+        return importe;
+    }
 }

@@ -8,57 +8,51 @@
 
     <ui:composition>
 
-        <h:form id="formularioEditar" >
-            <b:modal id="modalEditar" class="modal-editar-class" title="Crear/Editar Cliente">
+        <h:form id="formularioEditarLinea" >
+            <b:modal id="modalEditarLinea" class="modal-editar-class-linea" title="Crear/Editar linea de factura">
                 <b:container fluid="true">
-                    <b:panel title="Crear/Editar Factura" 
-                             rendered="#{not empty facturasController.facturaActual}" 
-                             collapsible="false">
-                        <b:panelGrid columns="2" col-spans="4,8">
-                            <h:outputLabel value="Ejercicio" for="ejercicio"/>
-                            <b:inputText id="ejercicio" value="#{facturasController.facturaActual.ejercicio}" required="true" requiredMessage="Debe indicarse el nombre del cliente"/>
-                            
-                            <h:outputLabel value="Cliente" for="cliente"/>    
-                            <b:selectOneMenu value="#{facturasController.facturaActual.cliente}" ajax="true" id="cliente">
-                            <f:selectItems value="#{facturasController.clientes}"/>
-                            </b:selectOneMenu>
-                            
-                            <h:outputLabel value="Fecha de emision" />
-                            <b:datepicker value="#{facturasController.facturaActual.fechaEmision}">
-                                <f:convertDateTime pattern="dd/MM/yyyy" locale="es_ES" timeZone="Europe/Madrid"/>
-                            </b:datepicker>
-                            
-                            <h:outputLabel value="Forma de pago" for="formapago"/>    
-                            <b:selectOneMenu value="#{facturasController.facturaActual.formaPago}" ajax="true" id="formapago">
-                            <f:converter converterId="omnifaces.ListConverter" />
-                            <f:selectItems value="#{facturasController.formasDePago}"/>
-                            </b:selectOneMenu>
-                            
-                            <h:outputLabel value="Estado" for="estado"/>    
-                            <b:selectOneMenu value="#{facturasController.facturaActual.estado}" ajax="true" id="estado">
-                            <f:converter converterId="omnifaces.GenericEnumConverter" />
-                            <f:selectItems value="#{facturasController.estadosPosibles}"/>
-                            </b:selectOneMenu>
-                            
-                            <h:outputLabel value="Comentarios" for="comentarios"/>
-                            <b:inputText id="comentarios" value="#{facturasController.facturaActual.comentarios}"  />
+                    <b:panel title="Crear linea de factura" 
+                            rendered="#{not empty facturasController.lineaFacturaActual}" 
+                            collapsible="false">
+                       <b:panelGrid columns="2" >
+                           <h:outputLabel value="Concepto" for="concepto"/>
+                           <b:inputText id="concepto" value="#{facturasController.lineaFacturaActual.concepto}" required="true" />
 
-                            
-                        </b:panelGrid>
+                           <h:outputLabel value="Cantidad" for="cantidad"/>
+                           <b:touchSpin id="cantidad" value="#{facturasController.lineaFacturaActual.cantidad}" min="1" required="true" />
 
-                        <b:commandButton value="Guardar Cambios" 
-                                         ajax="true" process="@form" update=":formularioListado:tablaListado :mensajesGlobal " 
-                                         actionListener="#{facturasController.doGuardarEditado()}"  
-                                         oncomplete="$('.modal-editar-class').modal('hide')"/>
+                           <h:outputLabel value="Precio unitario" for="precioUnitario"/>
+                           <b:inputText id="precioUnitario" value="#{facturasController.lineaFacturaActual.precioUnitario}"/>
+
+                           <h:outputLabel value="Tipo de iva" for="tipoiva"/>
+                           <b:selectOneMenu value="#{facturasController.lineaFacturaActual.tipoIva}" ajax="true" >
+                               <f:selectItems value="#{facturasController.tiposIva}"/>
+                           </b:selectOneMenu>
+
+                           <h:outputLabel value="% descuento" for="porcentaje"/>
+                           <b:slider2 min="0" max="1" step=".05" span="7" id="porcentaje" value="#{facturasController.lineaFacturaActual.porcentajeDescuento}" />
+
+                           <h:outputLabel value="Importe total" for="importe" />
+                           <h:outputText id="importe" value="#{(facturasController.lineaFacturaActual.precioUnitario * facturasController.lineaFacturaActual.cantidad) / facturasController.lineaFacturaActual.porcentajeDescuento}" />
+                        
+
+
+
+                       </b:panelGrid>
+                       <b:commandButton value="Guardar Cambios" 
+                                         ajax="true" process="@form" update=":formularioEditar:tablaListadoLineas :mensajesGlobal " 
+                                         actionListener="#{facturasController.doGuardarEditadoLineaFactura()}"  
+                                         oncomplete="$('.modal-editar-class-linea').modal('hide')"/>
 
                         <b:commandButton value="Cancelar" immediate="true"
-                                         ajax="true" process="@form" update=":formularioListado:tablaListado :mensajesGlobal " 
-                                         actionListener="#{facturasController.doCancelarEditado()}" 
-                                         oncomplete="$('.modal-editar-class').modal('hide')" />
-                    </b:panel>
+                                         ajax="true" process="@form" update=":mensajesGlobal " 
+                                         actionListener="#{facturasController.doCancelarEditadoLineaFactura()}" 
+                                         oncomplete="$('.modal-editar-class-linea').modal('hide')" />
+                   </b:panel>
                 </b:container>
             </b:modal>
         </h:form>
-
+        
+        
     </ui:composition>
 </html>

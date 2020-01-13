@@ -25,6 +25,7 @@ public class LineaFactura implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @NotNull
     private String concepto;
     @NotNull
@@ -91,5 +92,12 @@ public class LineaFactura implements Serializable{
 
     public void setFactura(Factura factura) {
         this.factura = factura;
+    }
+    
+    public double getImporte()
+    {
+        double precioSinIva = (this.cantidad * this.precioUnitario) ;
+        double precioSinIvaConDescuento = precioSinIva - (precioSinIva * this.porcentajeDescuento);
+        return precioSinIvaConDescuento + (precioSinIvaConDescuento * this.tipoIva.getPorcentaje() / 100);
     }
 }
