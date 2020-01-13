@@ -20,7 +20,6 @@
                 <b:panel title="Listado de Facturas" collapsible="false" offset="1" span="9">
                     <b:panelGrid columns="4" col-spans="6,2,2,2">
                         <b:selectOneMenu value="#{facturasController.clienteSeleccionado}" ajax="true" >
-                            <f:converter converterId="omnifaces.GenericEnumConverter" />
                             <f:selectItems value="#{facturasController.clientes}"/>
                         </b:selectOneMenu>
                         <b:commandButton value="Buscar Todas"  
@@ -72,7 +71,7 @@
 
                     <f:facet name="footer">
                         <b:commandButton id="botonNuevo" icon-awesome="plus" value="Crear Factura" tooltip="Nuevo Factura" ajax="true"
-                                         actionListener="#{clientesController.doNuevo()}" 
+                                         actionListener="#{facturasController.doNuevo()}" 
                                          update=":formularioEditar"
                                          oncomplete="$('.modal-editar-class').modal('show')"/>
                     </f:facet>

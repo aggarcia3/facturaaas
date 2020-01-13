@@ -34,7 +34,7 @@ public class Factura implements Serializable {
     private Cliente cliente;
     @Enumerated(EnumType.STRING)
     @NotNull
-    private EstadoFactura estado;
+    private EstadoFactura estado = EstadoFactura.EMITIDA;
     @ManyToOne
     @NotNull
     private FormaPago formaPago;

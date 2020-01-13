@@ -12,45 +12,48 @@
             <b:modal id="modalEditar" class="modal-editar-class" title="Crear/Editar Cliente">
                 <b:container fluid="true">
                     <b:panel title="Crear/Editar Factura" 
-                             rendered="#{not empty clientesController.clienteActual}" 
+                             rendered="#{not empty facturasController.facturaActual}" 
                              collapsible="false">
                         <b:panelGrid columns="2" col-spans="4,8">
-                            <h:outputLabel value="Nombre" for="nombre"/>
-                            <b:inputText id="nombre" value="#{clientesController.clienteActual.nombre}" required="true" requiredMessage="Debe indicarse el nombre del cliente"/>
+                            <h:outputLabel value="Ejercicio" for="ejercicio"/>
+                            <b:inputText id="ejercicio" value="#{facturasController.facturaActual.ejercicio}" required="true" requiredMessage="Debe indicarse el nombre del cliente"/>
+                            
+                            <h:outputLabel value="Cliente" for="cliente"/>    
+                            <b:selectOneMenu value="#{facturasController.facturaActual.cliente}" ajax="true" id="cliente">
+                            <f:selectItems value="#{facturasController.clientes}"/>
+                            </b:selectOneMenu>
+                            
+                            <h:outputLabel value="Fecha de emision" />
+                            <b:datepicker value="#{facturasController.facturaActual.fechaEmision}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" locale="es_ES" timeZone="Europe/Madrid"/>
+                            </b:datepicker>
+                            
+                            <h:outputLabel value="Forma de pago" for="formapago"/>    
+                            <b:selectOneMenu value="#{facturasController.facturaActual.formaPago}" ajax="true" id="formapago">
+                            <f:converter converterId="omnifaces.ListConverter" />
+                            <f:selectItems value="#{facturasController.formasDePago}"/>
+                            </b:selectOneMenu>
+                            
+                            <h:outputLabel value="Estado" for="estado"/>    
+                            <b:selectOneMenu value="#{facturasController.facturaActual.estado}" ajax="true" id="estado">
+                            <f:converter converterId="omnifaces.GenericEnumConverter" />
+                            <f:selectItems value="#{facturasController.estadosPosibles}"/>
+                            </b:selectOneMenu>
+                            
+                            <h:outputLabel value="Comentarios" for="comentarios"/>
+                            <b:inputText id="comentarios" value="#{facturasController.facturaActual.comentarios}"  />
 
-                            <h:outputLabel value="NIF" for="nif"/>
-                            <b:inputText id="nif" value="#{clientesController.clienteActual.nif}" required="true" requiredMessage="Debe indicarse el NIF del cliente"/>
-
-                            <h:outputLabel value="Domicilio" for="domicilio"/>
-                            <b:inputText id="domicilio" value="#{clientesController.clienteActual.direccion.domicilio}"/>
-
-                            <h:outputLabel value="Localidad" for="localidad"/>
-                            <b:inputText id="localidad" value="#{clientesController.clienteActual.direccion.localidad}"/>
-
-                            <h:outputLabel value="Código Postal" for="codpostal"/>
-                            <b:inputText id="codpostal" value="#{clientesController.clienteActual.direccion.codPostal}"/>
-
-                            <h:outputLabel value="Provincia" for="provincia"/>
-                            <b:inputText id="provincia" value="#{clientesController.clienteActual.direccion.provincia}"/>
-
-                            <h:outputLabel value="Teléfono" for="telefono"/>
-                            <b:inputText id="telefono" value="#{clientesController.clienteActual.telefono}"/>
-
-                            <h:outputLabel value="e-mail" for="email"/>
-                            <b:inputText id="email" value="#{clientesController.clienteActual.email}"/>
-
-                            <h:outputLabel value="Cuenta Bancaria" for="cuenta"/>
-                            <b:inputText id="cuenta" value="#{clientesController.clienteActual.cuentaBancaria}"/>                            
+                            
                         </b:panelGrid>
 
                         <b:commandButton value="Guardar Cambios" 
                                          ajax="true" process="@form" update=":formularioListado:tablaListado :mensajesGlobal " 
-                                         actionListener="#{clientesController.doGuardarEditado()}"  
+                                         actionListener="#{facturasController.doGuardarEditado()}"  
                                          oncomplete="$('.modal-editar-class').modal('hide')"/>
 
                         <b:commandButton value="Cancelar" immediate="true"
                                          ajax="true" process="@form" update=":formularioListado:tablaListado :mensajesGlobal " 
-                                         actionListener="#{clientesController.doCancelarEditado()}" 
+                                         actionListener="#{facturasController.doCancelarEditado()}" 
                                          oncomplete="$('.modal-editar-class').modal('hide')" />
                     </b:panel>
                 </b:container>

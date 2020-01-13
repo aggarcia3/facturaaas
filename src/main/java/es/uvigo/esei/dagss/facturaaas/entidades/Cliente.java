@@ -21,6 +21,11 @@ public class Cliente implements Serializable {
     @JoinColumn(name = "USUARIO_ID")
     private Usuario propietario;
 
+    @Override
+    public String toString() {
+        return "Cliente{" + "nombre=" + nombre + ", nif=" + nif + '}';
+    }
+
     private String nombre;
     private String nif;
     private Direccion direccion;
