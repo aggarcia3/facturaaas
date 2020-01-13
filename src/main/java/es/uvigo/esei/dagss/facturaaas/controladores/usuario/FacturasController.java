@@ -265,6 +265,7 @@ public class FacturasController implements Serializable{
     public void doEliminar(Factura f)
     {
         dao.eliminar(f);
+        this.facturas = this.refrescarLista();
     }
     
     public void doCancelarEditado(){
