@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package es.uvigo.esei.dagss.facturaaas.controladores.usuario;
 
 import es.uvigo.esei.dagss.facturaaas.controladores.AutenticacionController;
@@ -13,7 +8,6 @@ import es.uvigo.esei.dagss.facturaaas.daos.LineaFacturaDAO;
 import es.uvigo.esei.dagss.facturaaas.daos.TipoIVADAO;
 import es.uvigo.esei.dagss.facturaaas.entidades.Cliente;
 import es.uvigo.esei.dagss.facturaaas.entidades.EstadoFactura;
-import es.uvigo.esei.dagss.facturaaas.entidades.EstadoPago;
 import es.uvigo.esei.dagss.facturaaas.entidades.Factura;
 import es.uvigo.esei.dagss.facturaaas.entidades.FormaPago;
 import es.uvigo.esei.dagss.facturaaas.entidades.LineaFactura;
@@ -30,11 +24,10 @@ import javax.inject.Named;
  *
  * @author alex
  */
-
 @Named(value = "facturasController")
 @ViewScoped
-public class FacturasController implements Serializable{
-    
+public class FacturasController implements Serializable {
+
     private List<Factura> facturas;
     private boolean esNuevo;
     private List<Cliente> clientes;
@@ -48,6 +41,26 @@ public class FacturasController implements Serializable{
     private LineaFactura lineaFacturaActual;
     private boolean esNuevaLinea;
     private List<TipoIVA> tiposIva;
+
+    @Inject
+    private FacturaDAO dao;
+
+    @Inject
+    private LineaFacturaDAO daoLinea;
+
+    @Inject
+    private ClienteDAO daoCliente;
+
+    @Inject
+    private FormaPagoDAO daoFormaPago;
+
+    @Inject
+    private AutenticacionController autenticacionController;
+
+    @Inject
+    private TipoIVADAO daoIva;
+
+    private Factura facturaActual;
 
     public List<TipoIVA> getTiposIva() {
         return tiposIva;
@@ -89,8 +102,6 @@ public class FacturasController implements Serializable{
         this.estadosPosibles = estadosPosibles;
     }
 
-    
-
     public List<FormaPago> getFormasDePago() {
         return formasDePago;
     }
@@ -99,31 +110,6 @@ public class FacturasController implements Serializable{
         this.formasDePago = formasDePago;
     }
 
-    
-    
-
-    
-    
-    @Inject
-    private FacturaDAO dao;
-    
-    @Inject
-    private LineaFacturaDAO daoLinea;
-    
-    @Inject
-    private ClienteDAO daoCliente;
-    
-    @Inject
-    private FormaPagoDAO daoFormaPago;
-    
-    @Inject
-    private AutenticacionController autenticacionController;
-    
-    @Inject
-    private TipoIVADAO daoIva;
-    
-    private Factura facturaActual;
-
     public Factura getFacturaActual() {
         return facturaActual;
     }
@@ -131,125 +117,111 @@ public class FacturasController implements Serializable{
     public void setFacturaActual(Factura facturaActual) {
         this.facturaActual = facturaActual;
     }
-    
+
     @PostConstruct
-    public void cargaInicial(){
+    public void cargaInicial() {
         this.facturas = refrescarLista();
         this.facturaActual = null;
         this.lineasDeFacturaActual = null;
         this.clientes = refrescarClientes();
         this.formasDePago = daoFormaPago.buscarActivas();
         this.esNuevo = false;
-        
+
         this.tiposIva = daoIva.buscarActivos();
         this.lineasDeFacturaCrear = new ArrayList<>();
         this.lineasDeFacturaActualizar = new ArrayList<>();
         this.lineasDeFacturaEliminar = new ArrayList<>();
-        
 
     }
-    
-    public void doBuscarFacturasCliente()
-    {
+
+    public void doBuscarFacturasCliente() {
         this.facturas = dao.buscarPorCliente(clienteSeleccionado);
     }
- 
-    private List<Factura> refrescarLista(){
-        
+
+    private List<Factura> refrescarLista() {
+
         return dao.buscarPorUsuario(this.autenticacionController.getUsuarioLogueado());
     }
-    
-    private List<Cliente> refrescarClientes(){
+
+    private List<Cliente> refrescarClientes() {
         return daoCliente.buscarTodosConPropietario(autenticacionController.getUsuarioLogueado());
     }
-    
-    public void doNuevo(){
+
+    public void doNuevo() {
         this.esNuevo = true;
         this.facturaActual = new Factura();
         this.lineasDeFacturaActual = new ArrayList<>();
-        
+
     }
-    
-    public void doEditar(Factura factura){
+
+    public void doEditar(Factura factura) {
         this.esNuevo = false;
         this.facturaActual = factura;
-        
-        if(factura.getLineas() == null)
+
+        if (factura.getLineas() == null) {
             this.lineasDeFacturaActual = new ArrayList<>();
-        else
+        } else {
             this.lineasDeFacturaActual = factura.getLineas();
-        
+        }
+
     }
-    
-    public void doNuevaLinea()
-    {
+
+    public void doNuevaLinea() {
         this.esNuevaLinea = true;
         this.lineaFacturaActual = new LineaFactura();
         this.lineaFacturaActual.setPrecioUnitario(0);
         this.lineaFacturaActual.setPorcentajeDescuento(0);
-        
+
     }
-    
-    public void doEditarLinea(LineaFactura lineaFactura)
-    {
+
+    public void doEditarLinea(LineaFactura lineaFactura) {
         this.esNuevaLinea = false;
         this.lineaFacturaActual = lineaFactura;
     }
-    
-    public void doEliminarLinea(LineaFactura lineaFactura)
-    {
+
+    public void doEliminarLinea(LineaFactura lineaFactura) {
         this.lineasDeFacturaActual.remove(lineaFactura);
-        if(this.lineasDeFacturaCrear.contains(lineaFactura))
-        {
+        if (this.lineasDeFacturaCrear.contains(lineaFactura)) {
             this.lineasDeFacturaCrear.remove(lineaFactura);
-        }
-        else if(this.lineasDeFacturaActualizar.contains(lineaFactura))
-        {
+        } else if (this.lineasDeFacturaActualizar.contains(lineaFactura)) {
             this.lineasDeFacturaActualizar.remove(lineaFactura);
-        }
-        else{
+        } else {
             this.lineasDeFacturaEliminar.add(lineaFactura);
         }
     }
-    
-    
-    public void doGuardarEditadoLineaFactura(){
+
+    public void doGuardarEditadoLineaFactura() {
         if (this.esNuevaLinea) {
             this.lineasDeFacturaCrear.add(lineaFacturaActual);
             this.lineasDeFacturaActual.add(lineaFacturaActual);
         } else {
             this.lineasDeFacturaActualizar.add(lineaFacturaActual);
         }
-        
-        
+
         this.lineaFacturaActual = null;
-        
+
         this.esNuevaLinea = false;
     }
-    
-    public void doCancelarEditadoLineaFactura(){
+
+    public void doCancelarEditadoLineaFactura() {
         this.lineaFacturaActual = null;
         this.esNuevaLinea = false;
     }
-    
-    public void doGuardarEditado()
-    {
+
+    public void doGuardarEditado() {
         if (this.esNuevo) {
             dao.crear(facturaActual);
-            
+
         } else {
             dao.actualizar(facturaActual);
-            for(LineaFactura l : this.lineasDeFacturaActualizar)
-            {
+            for (LineaFactura l : this.lineasDeFacturaActualizar) {
                 daoLinea.actualizar(l);
             }
-            for(LineaFactura l : this.lineasDeFacturaEliminar)
-            {
+            for (LineaFactura l : this.lineasDeFacturaEliminar) {
                 daoLinea.eliminar(l);
             }
         }
-        for(LineaFactura l : this.lineasDeFacturaCrear)
-        {
+        for (LineaFactura l : this.lineasDeFacturaCrear) {
             l.setFactura(facturaActual);
             daoLinea.crear(l);
         }
@@ -261,18 +233,17 @@ public class FacturasController implements Serializable{
         this.lineasDeFacturaCrear.clear();
         this.lineasDeFacturaEliminar.clear();
     }
-    
-    public void doEliminar(Factura f)
-    {
+
+    public void doEliminar(Factura f) {
         dao.eliminar(f);
         this.facturas = this.refrescarLista();
     }
-    
-    public void doCancelarEditado(){
+
+    public void doCancelarEditado() {
         this.facturaActual = null;
         this.esNuevo = false;
     }
-    
+
     public Cliente getClienteSeleccionado() {
         return clienteSeleccionado;
     }
@@ -280,7 +251,7 @@ public class FacturasController implements Serializable{
     public void setClienteSeleccionado(Cliente clienteSeleccionado) {
         this.clienteSeleccionado = clienteSeleccionado;
     }
-    
+
     public List<Factura> getFacturas() {
         return facturas;
     }
