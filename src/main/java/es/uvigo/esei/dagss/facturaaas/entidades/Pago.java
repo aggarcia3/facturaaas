@@ -14,9 +14,13 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
- * @author alex
+ * Representa los datos de la entidad Pago.
+ *
+ * @author Alejandro González García
  */
 @Entity
 @Table(name="PAGO")
@@ -24,54 +28,26 @@ public class Pago implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @NotNull
+    @Getter
     private Long id;
+
     @ManyToOne
     @JoinColumn(name="FACTURA_ID")
     @NotNull
+    @Getter
     private Factura factura;
-    
+
     @Enumerated(EnumType.STRING)
     @NotNull
+    @Getter @Setter
     private EstadoPago estado;
+
     @NotNull
+    @Getter @Setter
     private Double importe;
+
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull
+    @Getter @Setter
     private Date fechaVencimiento;
-
-    public long getId() {
-        return id;
-    }
-
-    public Factura getFactura() {
-        return factura;
-    }
-
-    public void setFactura(Factura factura) {
-        this.factura = factura;
-    }
-
-    public EstadoPago getEstado() {
-        return estado;
-    }
-
-    public void setEstado(EstadoPago estado) {
-        this.estado = estado;
-    }
-
-    public double getImporte() {
-        return importe;
-    }
-
-    public void setImporte(double importe) {
-        this.importe = importe;
-    }
-
-    public Date getFechaVencimiento() {
-        return fechaVencimiento;
-    }
-
-    public void setFechaVencimiento(Date fechaVencimiento) {
-        this.fechaVencimiento = fechaVencimiento;
-    }
 }

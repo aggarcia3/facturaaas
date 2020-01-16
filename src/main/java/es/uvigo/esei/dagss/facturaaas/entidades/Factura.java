@@ -16,6 +16,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author alex
@@ -23,106 +25,54 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name="FACTURA")
 public class Factura implements Serializable {
-    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
     private Long id;
+
     @NotNull
+    @Getter @Setter
     private String ejercicio;
+
     @NotNull
     @ManyToOne
+    @Getter @Setter
     private Cliente cliente;
+
     @Enumerated(EnumType.STRING)
     @NotNull
+    @Getter @Setter
     private EstadoFactura estado = EstadoFactura.EMITIDA;
+
     @ManyToOne
     @NotNull
+    @Getter @Setter
     private FormaPago formaPago;
+
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull
+    @Getter @Setter
     private Date fechaEmision;
+
     @NotNull
+    @Getter @Setter
     private String comentarios;
+
     @OneToMany(mappedBy = "factura", cascade = CascadeType.ALL)
+    @Getter @Setter
     private List<LineaFactura> lineas;
+
     @OneToMany(mappedBy = "factura", cascade = CascadeType.ALL)
+    @Getter @Setter
     private List<Pago> pagos;
 
-    public List<LineaFactura> getLineas() {
-        return lineas;
-    }
-
-    public void setLineas(List<LineaFactura> lineas) {
-        this.lineas = lineas;
-    }
-
-    public List<Pago> getPagos() {
-        return pagos;
-    }
-
-    public void setPagos(List<Pago> pagos) {
-        this.pagos = pagos;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getEjercicio() {
-        return ejercicio;
-    }
-
-    public void setEjercicio(String ejercicio) {
-        this.ejercicio = ejercicio;
-    }
-
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
-
-    public EstadoFactura getEstado() {
-        return estado;
-    }
-
-    public void setEstado(EstadoFactura estado) {
-        this.estado = estado;
-    }
-
-    public FormaPago getFormaPago() {
-        return formaPago;
-    }
-
-    public void setFormaPago(FormaPago formaPago) {
-        this.formaPago = formaPago;
-    }
-
-    public Date getFechaEmision() {
-        return fechaEmision;
-    }
-
-    public void setFechaEmision(Date fechaEmision) {
-        this.fechaEmision = fechaEmision;
-    }
-
-    public String getComentarios() {
-        return comentarios;
-    }
-
-    public void setComentarios(String comentarios) {
-        this.comentarios = comentarios;
-    }
-    
-    public double getImporte()
-    {
+    public double getImporte() {
         double importe = 0;
-        for(LineaFactura l : this.lineas)
-        {
+
+        for (LineaFactura l : this.lineas) {
             importe += l.getImporte();
         }
+
         return importe;
     }
 }
