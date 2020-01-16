@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <o:importConstants type="es.uvigo.esei.dagss.facturaaas.entidades.EstadoPago"/>
+
+    <h:form id="formularioEditar">
+        <b:modal id="modalEditar" class="modal-editar-class" title="Editar pago">
+            <b:container fluid="true">
+                <b:panel title="Editar pago"
+                         rendered="#{not empty pagosController.pagoActual}"
+                         collapsible="false">
+                    <b:panelGrid columns="2" col-spans="4,8">
+                        <h:outputLabel value="Estado" for="estado"/>
+                        <b:selectOneMenu id="cliente" value="#{pagosController.pagoActual.estado}">
+                            <f:selectItems value="#{EstadoPago}"/>
+                        </b:selectOneMenu>
+
+                        <h:outputLabel value="Importe" for="importe"/>
+                        <b:inputText id="importe" value="#{pagosController.pagoActual.importe}">
+                            <f:convertNumber type="currency"/>
+                        </b:inputText>
+
+                        <h:outputLabel value="Fecha de vencimiento" for="vencimiento"/>
+                        <b:dateTimePicker id="vencimiento" value="#{pagosController.pagoActual.fechaVencimiento}" format="DD/MM/YYYY">
+                            <f:convertDateTime pattern="dd/MM/yyyy" locale="es_ES" timeZone="Europe/Madrid"/>
+                        </b:dateTimePicker>
+                    </b:panelGrid>
+
+                    <b:commandButton value="Guardar cambios"
+                                     ajax="true" process="@form" update=":formularioListado:tablaListado :mensajesGlobal"
+                                     actionListener="#{pagosController.doGuardarEdicion()}"
+                                     oncomplete="$('.modal-editar-class').modal('hide')"/>
+
+                    <b:commandButton value="Cancelar" immediate="true"
+                                     ajax="true" process="@form" update=":formularioListado:tablaListado :mensajesGlobal "
+                                     actionListener="#{pagosController.doCancelarEdicion()}"
+                                     oncomplete="$('.modal-editar-class').modal('hide')" />
+                </b:panel>
+            </b:container>
+        </b:modal>
+    </h:form>
+
+</ui:composition>

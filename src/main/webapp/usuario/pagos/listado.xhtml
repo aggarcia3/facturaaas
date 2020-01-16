@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8' ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <ui:composition template="/WEB-INF/includes/plantilla.xhtml"
                 xmlns="http://www.w3.org/1999/xhtml"
@@ -6,17 +6,78 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:b="http://bootsfaces.net/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
+
     <ui:define name="menu">
         <ui:include src="/WEB-INF/includes/menu-usuario.xhtml"/>
     </ui:define>
-    
+
     <ui:define name="tituloPagina">
         <h1>Pagos</h1>
     </ui:define>
 
     <ui:define name="contenido">
-        <h2>Historia de usuario H16</h2>
+        <h:form id="formularioListado">
+            <b:container fluid="true">
+                <b:panel title="Lista de pagos" collapsible="false">
+                    <b:panelGrid columns="4" col-spans="2,2,4,4">
+                        <h:outputLabel value="Filtrar por cliente"/>
+                        <b:selectOneMenu id="cliente" value="#{pagosController.clienteFiltro}" process="cliente"
+                                         ajax="true" update=":formularioListado:tablaListado :mensajesGlobal">
+                            <f:selectItem itemValue="#{null}" itemLabel="Sin filtro"/>
+                            <f:selectItems value="#{pagosController.clientesUsuario}"
+                                           var="cliente" itemLabel="#{cliente.nombre} (#{cliente.nif})"/>
+                        </b:selectOneMenu>
+                    </b:panelGrid>
+
+                    <b:dataTable id="tablaListado" class="tablaListadoClass"
+                                 value="#{pagosController.pagos}"
+                                 var="pago" striped="true"
+                                 page-length="10" searching="false">
+
+                        <b:dataTableColumn label="Identificador">
+                            <h:outputText value="#{pago.id}"/>
+                        </b:dataTableColumn>
+
+                        <b:dataTableColumn label="Número de factura">
+                            <h:outputText value="#{pago.factura.id}"/>
+                        </b:dataTableColumn>
+
+                        <b:dataTableColumn label="Nombre del cliente">
+                            <h:outputText value="#{pago.factura.cliente.nombre}"/>
+                        </b:dataTableColumn>
+
+                        <b:dataTableColumn label="NIF del cliente">
+                            <h:outputText value="#{pago.factura.cliente.nif}"/>
+                        </b:dataTableColumn>
+
+                        <b:dataTableColumn label="Estado">
+                            <h:outputText value="#{pago.estado}"/>
+                        </b:dataTableColumn>
+
+                        <b:dataTableColumn label="Importe">
+                            <h:outputText value="#{pago.importe}">
+                                <f:convertNumber type="currency"/>
+                            </h:outputText>
+                        </b:dataTableColumn>
+
+                        <b:dataTableColumn label="Fecha de vencimiento">
+                            <h:outputText value="#{pago.fechaVencimiento}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" locale="es_ES" timeZone="Europe/Madrid"/>
+                            </h:outputText>
+                        </b:dataTableColumn>
+
+                        <b:dataTableColumn label="" orderable="false">
+                            <b:commandButton id="botonEditar" icon-awesome="pencil" tooltip="Editar pago" ajax="true"
+                                             actionListener="#{pagosController.doEditar(pago)}"
+                                             update=":formularioEditar"
+                                             oncomplete="$('.modal-editar-class').modal('show')"/>
+                        </b:dataTableColumn>
+                    </b:dataTable>
+                </b:panel>
+            </b:container>
+        </h:form>
+
+        <ui:include src="fragmento-editar.xhtml"/>
     </ui:define>    
-    
-    
+
 </ui:composition>
