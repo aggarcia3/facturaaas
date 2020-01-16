@@ -27,14 +27,13 @@ import lombok.Setter;
 public class Pago implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @NotNull
     @Getter
     private Long id;
 
     @ManyToOne
     @JoinColumn(name="FACTURA_ID")
     @NotNull
-    @Getter
+    @Getter @Setter
     private Factura factura;
 
     @Enumerated(EnumType.STRING)
