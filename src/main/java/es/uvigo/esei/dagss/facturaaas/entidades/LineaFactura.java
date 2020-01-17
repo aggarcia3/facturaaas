@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package es.uvigo.esei.dagss.facturaaas.entidades;
 import java.io.Serializable;
 import javax.persistence.Entity;
@@ -13,6 +8,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  *
@@ -21,82 +18,40 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name="LINEA_FACTURA")
 public class LineaFactura implements Serializable{
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
     private Long id;
 
     @NotNull
+    @Getter @Setter
     private String concepto;
+
     @NotNull
+    @Getter @Setter
     private Integer cantidad = 1;
+
     @NotNull
+    @Getter @Setter
     private Double precioUnitario;
+
     @NotNull
+    @Getter @Setter
     private Float porcentajeDescuento;
+
     @ManyToOne
     @NotNull
+    @Getter @Setter
     private TipoIVA tipoIva;
+
     @ManyToOne
     @JoinColumn(name = "FACTURA_ID")
     @NotNull
+    @Getter @Setter
     private Factura factura;
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getConcepto() {
-        return concepto;
-    }
-
-    public void setConcepto(String concepto) {
-        this.concepto = concepto;
-    }
-
-    public int getCantidad() {
-        return cantidad;
-    }
-
-    public void setCantidad(int cantidad) {
-        this.cantidad = cantidad;
-    }
-
-    public double getPrecioUnitario() {
-        return precioUnitario;
-    }
-
-    public void setPrecioUnitario(double precioUnitario) {
-        this.precioUnitario = precioUnitario;
-    }
-
-    public float getPorcentajeDescuento() {
-        return porcentajeDescuento;
-    }
-
-    public void setPorcentajeDescuento(float porcentajeDescuento) {
-        this.porcentajeDescuento = porcentajeDescuento;
-    }
-
-    public TipoIVA getTipoIva() {
-        return tipoIva;
-    }
-
-    public void setTipoIva(TipoIVA tipoIva) {
-        this.tipoIva = tipoIva;
-    }
-
-    public Factura getFactura() {
-        return factura;
-    }
-
-    public void setFactura(Factura factura) {
-        this.factura = factura;
-    }
-    
-    public double getImporte()
-    {
-        double precioSinIva = (this.cantidad * this.precioUnitario) ;
+    public double getImporte() {
+        double precioSinIva = (this.cantidad * this.precioUnitario);
         double precioSinIvaConDescuento = precioSinIva - (precioSinIva * this.porcentajeDescuento);
         return precioSinIvaConDescuento + (precioSinIvaConDescuento * this.tipoIva.getPorcentaje() / 100);
     }

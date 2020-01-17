@@ -18,6 +18,13 @@ public interface FacturaDAO extends GenericoDAO<Factura, Long> {
      * @return Una lista con las facturas a nombre del cliente.
      */
     public List<Factura> buscarPorCliente(Cliente cliente);
-    
+
+    /**
+     * Recupera las facturas asociadas a cualquiera de los clientes de un
+     * usuario.
+     *
+     * @param usuario El usuario cuyas facturas recuperar.
+     * @return La lista de facturas recuperadas.
+     */
     public List<Factura> buscarPorUsuario(Usuario usuario);
 }

@@ -19,6 +19,8 @@ import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  *
@@ -28,19 +30,30 @@ import javax.inject.Named;
 @ViewScoped
 public class FacturasController implements Serializable {
 
+    @Getter @Setter
     private List<Factura> facturas;
     private boolean esNuevo;
+    @Getter @Setter
     private List<Cliente> clientes;
+    @Getter @Setter
     private Cliente clienteSeleccionado;
+    @Getter @Setter
     private List<FormaPago> formasDePago;
+    @Getter @Setter
     private EstadoFactura[] estadosPosibles = EstadoFactura.values();
+    @Getter @Setter
     private List<LineaFactura> lineasDeFacturaActual;
     private List<LineaFactura> lineasDeFacturaCrear;
     private List<LineaFactura> lineasDeFacturaActualizar;
     private List<LineaFactura> lineasDeFacturaEliminar;
+    @Getter @Setter
     private LineaFactura lineaFacturaActual;
+    @Getter @Setter
     private boolean esNuevaLinea;
+    @Getter @Setter
     private List<TipoIVA> tiposIva;
+    @Getter @Setter
+    private Factura facturaActual;
 
     @Inject
     private FacturaDAO dao;
@@ -59,64 +72,6 @@ public class FacturasController implements Serializable {
 
     @Inject
     private TipoIVADAO daoIva;
-
-    private Factura facturaActual;
-
-    public List<TipoIVA> getTiposIva() {
-        return tiposIva;
-    }
-
-    public void setTiposIva(List<TipoIVA> tiposIva) {
-        this.tiposIva = tiposIva;
-    }
-
-    public boolean isEsNuevaLinea() {
-        return esNuevaLinea;
-    }
-
-    public void setEsNuevaLinea(boolean esNuevaLinea) {
-        this.esNuevaLinea = esNuevaLinea;
-    }
-
-    public LineaFactura getLineaFacturaActual() {
-        return lineaFacturaActual;
-    }
-
-    public void setLineaFacturaActual(LineaFactura lineaFacturaActual) {
-        this.lineaFacturaActual = lineaFacturaActual;
-    }
-
-    public List<LineaFactura> getLineasDeFacturaActual() {
-        return lineasDeFacturaActual;
-    }
-
-    public void setLineasDeFacturaActual(List<LineaFactura> lineasDeFacturaActual) {
-        this.lineasDeFacturaActual = lineasDeFacturaActual;
-    }
-
-    public EstadoFactura[] getEstadosPosibles() {
-        return estadosPosibles;
-    }
-
-    public void setEstadosPosibles(EstadoFactura[] estadosPosibles) {
-        this.estadosPosibles = estadosPosibles;
-    }
-
-    public List<FormaPago> getFormasDePago() {
-        return formasDePago;
-    }
-
-    public void setFormasDePago(List<FormaPago> formasDePago) {
-        this.formasDePago = formasDePago;
-    }
-
-    public Factura getFacturaActual() {
-        return facturaActual;
-    }
-
-    public void setFacturaActual(Factura facturaActual) {
-        this.facturaActual = facturaActual;
-    }
 
     @PostConstruct
     public void cargaInicial() {
@@ -169,8 +124,8 @@ public class FacturasController implements Serializable {
     public void doNuevaLinea() {
         this.esNuevaLinea = true;
         this.lineaFacturaActual = new LineaFactura();
-        this.lineaFacturaActual.setPrecioUnitario(0);
-        this.lineaFacturaActual.setPorcentajeDescuento(0);
+        this.lineaFacturaActual.setPrecioUnitario(0.0);
+        this.lineaFacturaActual.setPorcentajeDescuento(0.0f);
 
     }
 
@@ -242,29 +197,5 @@ public class FacturasController implements Serializable {
     public void doCancelarEditado() {
         this.facturaActual = null;
         this.esNuevo = false;
-    }
-
-    public Cliente getClienteSeleccionado() {
-        return clienteSeleccionado;
-    }
-
-    public void setClienteSeleccionado(Cliente clienteSeleccionado) {
-        this.clienteSeleccionado = clienteSeleccionado;
-    }
-
-    public List<Factura> getFacturas() {
-        return facturas;
-    }
-
-    public void setFacturas(List<Factura> facturas) {
-        this.facturas = facturas;
-    }
-
-    public List<Cliente> getClientes() {
-        return clientes;
-    }
-
-    public void setClientes(List<Cliente> clientes) {
-        this.clientes = clientes;
     }
 }
