@@ -20,7 +20,7 @@
                 <b:panel title="Listado de Facturas" collapsible="false" offset="1" span="9">
                     <b:panelGrid columns="4" col-spans="6,2,2,2">
                         <b:selectOneMenu value="#{facturasController.clienteSeleccionado}" ajax="true" >
-                            <f:selectItems value="#{facturasController.clientes}"/>
+                            <f:selectItems value="#{facturasController.clientes}" var="cliente" itemLabel="#{cliente.nombre} (#{cliente.nif})"/>
                         </b:selectOneMenu>
                         <b:commandButton value="Buscar facturas"  
                                          actionListener="#{facturasController.doBuscarFacturasCliente()}"
@@ -42,7 +42,7 @@
                         </b:dataTableColumn>                    
 
                         <b:dataTableColumn label="Cliente">
-                            <h:outputText value="#{factura.cliente}" />
+                            <h:outputText value="#{factura.cliente.nombre} (#{factura.cliente.nif})" />
                         </b:dataTableColumn>                  
 
                         <b:dataTableColumn label="Estado">
@@ -50,15 +50,19 @@
                         </b:dataTableColumn>                    
 
                         <b:dataTableColumn label="Forma de pago" >
-                            <h:outputText value="#{factura.formaPago}" />
+                            <h:outputText value="#{factura.formaPago.nombre}" />
                         </b:dataTableColumn>
 
-                        <b:dataTableColumn label="Fecha emision" >
-                            <h:outputText value="#{factura.fechaEmision}" />
+                        <b:dataTableColumn label="Fecha de emisión" >
+                            <h:outputText value="#{factura.fechaEmision}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" locale="es_ES" timeZone="Europe/Madrid"/>
+                            </h:outputText>
                         </b:dataTableColumn>
                         
                         <b:dataTableColumn label="Importe" >
-                            <h:outputText value="#{factura.getImporte()}" />
+                            <h:outputText value="#{factura.getImporte()}">
+                                <f:convertNumber type="currency"/>
+                            </h:outputText>
                         </b:dataTableColumn>
                         
                         <b:dataTableColumn label="" orderable="false">
@@ -73,7 +77,7 @@
                     </b:dataTable>
 
                     <f:facet name="footer">
-                        <b:commandButton id="botonNuevo" icon-awesome="plus" value="Crear Factura" tooltip="Nuevo Factura" ajax="true"
+                        <b:commandButton id="botonNuevo" icon-awesome="plus" value="Crear Factura" tooltip="Nueva Factura" ajax="true"
                                          actionListener="#{facturasController.doNuevo()}" 
                                          update=":formularioEditar"
                                          />
@@ -94,23 +98,23 @@
                             
                             <h:outputLabel value="Cliente" for="cliente"/>    
                             <b:selectOneMenu value="#{facturasController.facturaActual.cliente}" ajax="true" id="cliente">
-                            <f:selectItems value="#{facturasController.clientes}"/>
+                                <f:selectItems value="#{facturasController.clientes}" var="cliente" itemLabel="#{cliente.nombre} (#{cliente.nif})"/>
                             </b:selectOneMenu>
                             
-                            <h:outputLabel value="Fecha de emision" />
-                            <b:datepicker value="#{facturasController.facturaActual.fechaEmision}">
+                            <h:outputLabel value="Fecha de emisión" />
+                            <b:dateTimePicker value="#{facturasController.facturaActual.fechaEmision}" format="DD/MM/YYYY" class="form-group">
                                 <f:convertDateTime pattern="dd/MM/yyyy" locale="es_ES" timeZone="Europe/Madrid"/>
-                            </b:datepicker>
+                            </b:dateTimePicker>
                             
                             <h:outputLabel value="Forma de pago" for="formapago"/>    
                             <b:selectOneMenu value="#{facturasController.facturaActual.formaPago}" ajax="true" id="formapago">
-                            <f:selectItems value="#{facturasController.formasDePago}"/>
+                                <f:selectItems value="#{facturasController.formasDePago}" var="formadepago" itemLabel="#{formadepago.nombre}"/>
                             </b:selectOneMenu>
                             
                             <h:outputLabel value="Estado" for="estado"/>    
                             <b:selectOneMenu value="#{facturasController.facturaActual.estado}" ajax="true" id="estado">
-                            <f:converter converterId="omnifaces.GenericEnumConverter" />
-                            <f:selectItems value="#{facturasController.estadosPosibles}"/>
+                                <f:converter converterId="omnifaces.GenericEnumConverter" />
+                                <f:selectItems value="#{facturasController.estadosPosibles}"/>
                             </b:selectOneMenu>
                             
                             <h:outputLabel value="Comentarios" for="comentarios"/>
@@ -130,15 +134,21 @@
                                 </b:dataTableColumn>                    
 
                                 <b:dataTableColumn label="Cantidad">
-                                    <h:outputText value="#{lineadefactura.cantidad}" />
+                                    <h:outputText value="#{lineadefactura.cantidad}">
+                                        <f:convertNumber integerOnly="true"/>
+                                    </h:outputText>
                                 </b:dataTableColumn>                  
 
-                                <b:dataTableColumn label="Precio Unitario">
-                                    <h:outputText value="#{lineadefactura.precioUnitario}" />
+                                <b:dataTableColumn label="Precio unitario">
+                                    <h:outputText value="#{lineadefactura.precioUnitario}">
+                                        <f:convertNumber type="currency"/>
+                                    </h:outputText>
                                 </b:dataTableColumn>                    
 
                                 <b:dataTableColumn label="Porcentaje de descuento" >
-                                    <h:outputText value="#{lineadefactura.porcentajeDescuento}" />
+                                    <h:outputText value="#{lineadefactura.porcentajeDescuento}">
+                                        <f:convertNumber type="percent"/>
+                                    </h:outputText>
                                 </b:dataTableColumn>
                                 
                                 <b:dataTableColumn label="Importe" >
@@ -147,7 +157,7 @@
                                 
                                 <b:dataTableColumn label="">
                                 
-                                    <b:commandButton id="botonEditar" icon-awesome="pencil" tooltip="Editar linea de factura" immediate="true" ajax="true"
+                                    <b:commandButton id="botonEditar" icon-awesome="pencil" tooltip="Editar línea de factura" immediate="true" ajax="true"
                                                      actionListener="#{facturasController.doEditarLinea(lineadefactura)}" 
                                                     update=":formularioEditarLinea"
                                                     oncomplete="$('.modal-editar-class-linea').modal('show')"/>
@@ -158,7 +168,7 @@
 
                             </b:dataTable>
                             
-                            <b:commandButton id="botonNuevo" icon-awesome="plus" value="Crear Linea" tooltip="Nueva linea de factura" immediate="true"
+                            <b:commandButton id="botonNuevo" icon-awesome="plus" value="Crear Línea" tooltip="Nueva línea de factura" immediate="true"
                                              actionListener="#{facturasController.doNuevaLinea()}" 
                                             update=":formularioEditarLinea"
                                             oncomplete="$('.modal-editar-class-linea').modal('show')"/>
