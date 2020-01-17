@@ -1,6 +1,7 @@
 package es.uvigo.esei.dagss.facturaaas.entidades;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -58,21 +59,35 @@ public class Factura implements Serializable {
     @Getter @Setter
     private String comentarios;
 
-    @OneToMany(mappedBy = "factura", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "factura", cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
     @Getter @Setter
-    private List<LineaFactura> lineas;
+    private List<LineaFactura> lineas = new ArrayList<>();
 
-    @OneToMany(mappedBy = "factura", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "factura", cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
     @Getter @Setter
-    private List<Pago> pagos;
+    private List<Pago> pagos = new ArrayList<>();
 
     public double getImporte() {
         double importe = 0;
 
-        for (LineaFactura l : this.lineas) {
+        for (LineaFactura l : getLineas()) {
             importe += l.getImporte();
         }
 
         return importe;
+    }
+
+    public void addLineaFactura(LineaFactura lineaFactura) {
+        lineas.add(lineaFactura);
+        lineaFactura.setFactura(this);
+    }
+
+    public void removeLineaFactura(LineaFactura lineaFactura) {
+        lineas.remove(lineaFactura);
+    }
+
+    @Override
+    public String toString() {
+        return "Factura{" + "id=" + id + ", ejercicio=" + ejercicio + ", cliente=" + cliente + ", estado=" + estado + ", formaPago=" + formaPago + ", fechaEmision=" + fechaEmision + ", comentarios=" + comentarios + '}';
     }
 }

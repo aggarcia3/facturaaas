@@ -5,6 +5,7 @@
  */
 package es.uvigo.esei.dagss.facturaaas.daos;
 
+import es.uvigo.esei.dagss.facturaaas.entidades.Factura;
 import es.uvigo.esei.dagss.facturaaas.entidades.LineaFactura;
 
 /**
@@ -12,5 +13,5 @@ import es.uvigo.esei.dagss.facturaaas.entidades.LineaFactura;
  * @author alex
  */
 public interface LineaFacturaDAO extends GenericoDAO<LineaFactura, Long>{
-    
+    public void eliminarPorFactura(Factura f);
 }

@@ -94,41 +94,37 @@
                              collapsible="false">
                         <b:panelGrid columns="2" col-spans="4,8">
                             <h:outputLabel value="Ejercicio" for="ejercicio"/>
-                            <b:inputText id="ejercicio" value="#{facturasController.facturaActual.ejercicio}" required="true" requiredMessage="Debe indicarse el nombre del cliente"/>
-                            
+                            <b:inputText id="ejercicio" value="#{facturasController.facturaActual.ejercicio}" required="true" requiredMessage="Debe indicarse el ejercicio"/>
+
                             <h:outputLabel value="Cliente" for="cliente"/>    
                             <b:selectOneMenu value="#{facturasController.facturaActual.cliente}" ajax="true" id="cliente">
                                 <f:selectItems value="#{facturasController.clientes}" var="cliente" itemLabel="#{cliente.nombre} (#{cliente.nif})"/>
                             </b:selectOneMenu>
-                            
+
                             <h:outputLabel value="Fecha de emisión" />
-                            <b:dateTimePicker value="#{facturasController.facturaActual.fechaEmision}" format="DD/MM/YYYY" class="form-group">
+                            <b:dateTimePicker value="#{facturasController.facturaActual.fechaEmision}" format="DD/MM/YYYY" class="form-group" required="true" requiredMessage="Debe indicarse la fecha de emisión">
                                 <f:convertDateTime pattern="dd/MM/yyyy" locale="es_ES" timeZone="Europe/Madrid"/>
                             </b:dateTimePicker>
-                            
+
                             <h:outputLabel value="Forma de pago" for="formapago"/>    
                             <b:selectOneMenu value="#{facturasController.facturaActual.formaPago}" ajax="true" id="formapago">
                                 <f:selectItems value="#{facturasController.formasDePago}" var="formadepago" itemLabel="#{formadepago.nombre}"/>
                             </b:selectOneMenu>
-                            
+
                             <h:outputLabel value="Estado" for="estado"/>    
                             <b:selectOneMenu value="#{facturasController.facturaActual.estado}" ajax="true" id="estado">
                                 <f:converter converterId="omnifaces.GenericEnumConverter" />
                                 <f:selectItems value="#{facturasController.estadosPosibles}"/>
                             </b:selectOneMenu>
-                            
+
                             <h:outputLabel value="Comentarios" for="comentarios"/>
                             <b:inputText id="comentarios" value="#{facturasController.facturaActual.comentarios}"  />
 
                             <b:dataTable id="tablaListadoLineas"  class="tablaListadoClass"
-                                         value="#{facturasController.lineasDeFacturaActual}"
+                                         value="#{facturasController.facturaActual.lineas}"
                                  var="lineadefactura" 
                                  striped="true" 
                                  page-length="10" searching="false">
-                                <b:dataTableColumn label="Id">
-                                    <h:outputText value="#{lineadefactura.id}"/>
-                                </b:dataTableColumn>
-
                                 <b:dataTableColumn label="Concepto">
                                     <h:outputText value="#{lineadefactura.concepto}" />
                                 </b:dataTableColumn>                    
@@ -152,7 +148,9 @@
                                 </b:dataTableColumn>
                                 
                                 <b:dataTableColumn label="Importe" >
-                                    <h:outputText value="#{(lineadefactura.cantidad * lineadefactura.precioUnitario)}" />
+                                    <h:outputText value="#{lineadefactura.getImporte()}">
+                                        <f:convertNumber type="currency"/>
+                                    </h:outputText>
                                 </b:dataTableColumn>
                                 
                                 <b:dataTableColumn label="">

@@ -16,7 +16,6 @@ import es.uvigo.esei.dagss.facturaaas.entidades.LineaFactura;
 import es.uvigo.esei.dagss.facturaaas.entidades.Pago;
 import es.uvigo.esei.dagss.facturaaas.entidades.TipoIVA;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -47,11 +46,6 @@ public class FacturasController implements Serializable {
     @Getter @Setter
     private EstadoFactura[] estadosPosibles = EstadoFactura.values();
     @Getter @Setter
-    private List<LineaFactura> lineasDeFacturaActual;
-    private List<LineaFactura> lineasDeFacturaCrear;
-    private List<LineaFactura> lineasDeFacturaActualizar;
-    private List<LineaFactura> lineasDeFacturaEliminar;
-    @Getter @Setter
     private LineaFactura lineaFacturaActual;
     @Getter @Setter
     private boolean esNuevaLinea;
@@ -62,7 +56,7 @@ public class FacturasController implements Serializable {
 
     @Inject
     private FacturaDAO dao;
-    
+
     @Inject
     private PagoDAO daoPago;
 
@@ -85,15 +79,11 @@ public class FacturasController implements Serializable {
     public void cargaInicial() {
         this.facturas = refrescarLista();
         this.facturaActual = null;
-        this.lineasDeFacturaActual = null;
         this.clientes = refrescarClientes();
         this.formasDePago = daoFormaPago.buscarActivas();
         this.esNuevo = false;
 
         this.tiposIva = daoIva.buscarActivos();
-        this.lineasDeFacturaCrear = new ArrayList<>();
-        this.lineasDeFacturaActualizar = new ArrayList<>();
-        this.lineasDeFacturaEliminar = new ArrayList<>();
 
     }
 
@@ -102,8 +92,7 @@ public class FacturasController implements Serializable {
     }
 
     private List<Factura> refrescarLista() {
-
-        return dao.buscarPorUsuario(this.autenticacionController.getUsuarioLogueado());
+        return dao.buscarPorUsuario(autenticacionController.getUsuarioLogueado());
     }
 
     private List<Cliente> refrescarClientes() {
@@ -113,28 +102,16 @@ public class FacturasController implements Serializable {
     public void doNuevo() {
         this.esNuevo = true;
         this.facturaActual = new Factura();
-        this.lineasDeFacturaActual = new ArrayList<>();
-
     }
 
     public void doEditar(Factura factura) {
         this.esNuevo = false;
         this.facturaActual = factura;
-
-        if (factura.getLineas() == null) {
-            this.lineasDeFacturaActual = new ArrayList<>();
-        } else {
-            this.lineasDeFacturaActual = factura.getLineas();
-        }
-
     }
 
     public void doNuevaLinea() {
         this.esNuevaLinea = true;
         this.lineaFacturaActual = new LineaFactura();
-        this.lineaFacturaActual.setPrecioUnitario(0.0);
-        this.lineaFacturaActual.setPorcentajeDescuento(0.0f);
-
     }
 
     public void doEditarLinea(LineaFactura lineaFactura) {
@@ -143,14 +120,13 @@ public class FacturasController implements Serializable {
     }
 
     public void doEliminarLinea(LineaFactura lineaFactura) {
-        this.lineasDeFacturaActual.remove(lineaFactura);
-        
+        facturaActual.removeLineaFactura(lineaFactura);
+        daoLinea.eliminar(lineaFactura);
     }
 
     public void doGuardarEditadoLineaFactura() {
-        if (this.esNuevaLinea) {
-            this.lineaFacturaActual.setFactura(facturaActual);
-            this.lineasDeFacturaActual.add(lineaFacturaActual);
+        if (esNuevaLinea) {
+            facturaActual.addLineaFactura(lineaFacturaActual);
         }
 
         this.lineaFacturaActual = null;
@@ -164,45 +140,53 @@ public class FacturasController implements Serializable {
     }
 
     public void doGuardarEditado() {
-        if (this.esNuevo) {
+        if (esNuevo) {
             dao.crear(facturaActual);
-
         } else {
-            dao.actualizar(facturaActual);
             daoPago.eliminarPagosPorFactura(facturaActual);
+
+            dao.actualizar(facturaActual);
         }
-        
-        int numeroPagos = this.facturaActual.getFormaPago().getNumeroPagos();
-        int periocidad = this.facturaActual.getFormaPago().getPeriodicidad();
-        Date fechaEmision = this.facturaActual.getFechaEmision();
-        Calendar c;
-        c = Calendar.getInstance();
-        Date fechaPago = fechaEmision;
-        for(int i = 0; i < numeroPagos ; i++)
-        {
-            c.setTime(fechaPago);
-            c.add(Calendar.DATE, periocidad);
-            fechaPago = c.getTime();
+
+        int numeroPagos = facturaActual.getFormaPago().getNumeroPagos();
+        int periocidad = facturaActual.getFormaPago().getPeriodicidad();
+        double importePorPago = facturaActual.getImporte() / numeroPagos;
+        Date fechaEmision = facturaActual.getFechaEmision();
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(fechaEmision);
+
+        // El primer pago vence en la fecha de emisión de la factura
+        Date fechaVencimientoPago = fechaEmision;
+
+        for (int i = 0; i < numeroPagos; i++) {
             Pago p = new Pago();
             p.setEstado(EstadoPago.PENDIENTE);
-            p.setFechaVencimiento(fechaPago);
+            p.setFechaVencimiento(fechaVencimientoPago);
             p.setFactura(facturaActual);
-            p.setImporte(this.facturaActual.getImporte() / numeroPagos);
+            p.setImporte(importePorPago);
             daoPago.crear(p);
+
+            // El siguiente pago vencerá periodicidad días después
+            c.add(Calendar.DATE, periocidad);
+            fechaVencimientoPago = c.getTime();
         }
-        
+
         this.facturas = refrescarLista();
         this.facturaActual = null;
         this.esNuevo = false;
-        this.lineasDeFacturaActual.clear();
-        this.lineasDeFacturaActualizar.clear();
-        this.lineasDeFacturaCrear.clear();
-        this.lineasDeFacturaEliminar.clear();
     }
 
     public void doEliminar(Factura f) {
+        // Con JPA no es posible eliminar en cascada todas las entidades relacionadas,
+        // pues ello invalida a veces restricciones de integridad (depende del orden
+        // de las consultas SQL generadas).
+        // Es necesario eliminar primero las entidades del lado N manualmente
+        daoPago.eliminarPagosPorFactura(f);
+        daoLinea.eliminarPorFactura(f);
+
         dao.eliminar(f);
-        this.facturas = this.refrescarLista();
+        this.facturas = refrescarLista();
     }
 
     public void doCancelarEditado() {

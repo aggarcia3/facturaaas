@@ -39,7 +39,6 @@ public class LineaFactura implements Serializable{
     @Getter @Setter
     private Float porcentajeDescuento;
 
-    @ManyToOne
     @NotNull
     @Getter @Setter
     private TipoIVA tipoIva;
@@ -51,8 +50,13 @@ public class LineaFactura implements Serializable{
     private Factura factura;
 
     public double getImporte() {
-        double precioSinIva = (this.cantidad * this.precioUnitario);
-        double precioSinIvaConDescuento = precioSinIva - (precioSinIva * this.porcentajeDescuento);
-        return precioSinIvaConDescuento + (precioSinIvaConDescuento * this.tipoIva.getPorcentaje() / 100);
+        double precioSinIva = getCantidad() * getPrecioUnitario();
+        double precioSinIvaConDescuento = precioSinIva - (precioSinIva * getPorcentajeDescuento());
+        return precioSinIvaConDescuento + precioSinIvaConDescuento * (getTipoIva().getPorcentaje() / 100);
+    }
+
+    @Override
+    public String toString() {
+        return "LineaFactura{" + "id=" + id + ", concepto=" + concepto + ", cantidad=" + cantidad + ", precioUnitario=" + precioUnitario + ", porcentajeDescuento=" + porcentajeDescuento + ", tipoIva=" + tipoIva + ", factura=" + factura + '}';
     }
 }

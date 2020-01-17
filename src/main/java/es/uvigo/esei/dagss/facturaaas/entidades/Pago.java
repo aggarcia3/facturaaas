@@ -31,7 +31,7 @@ public class Pago implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name="FACTURA_ID")
+    @JoinColumn(name = "FACTURA_ID")
     @NotNull
     @Getter @Setter
     private Factura factura;
@@ -49,4 +49,9 @@ public class Pago implements Serializable {
     @NotNull
     @Getter @Setter
     private Date fechaVencimiento;
+
+    @Override
+    public String toString() {
+        return "Pago{" + "estado=" + estado + ", importe=" + importe + ", fechaVencimiento=" + fechaVencimiento + '}';
+    }
 }

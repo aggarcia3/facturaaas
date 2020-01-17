@@ -9,9 +9,9 @@
     <ui:composition>
 
         <h:form id="formularioEditarLinea" >
-            <b:modal id="modalEditarLinea" class="modal-editar-class-linea" title="Crear/Editar linea de factura">
+            <b:modal id="modalEditarLinea" class="modal-editar-class-linea" title="Crear/Editar línea de factura">
                 <b:container fluid="true">
-                    <b:panel title="Crear linea de factura" 
+                    <b:panel title="Crear/Editar línea de factura"
                             rendered="#{not empty facturasController.lineaFacturaActual}" 
                             collapsible="false">
                        <b:panelGrid columns="2" >
@@ -22,22 +22,17 @@
                            <b:touchSpin id="cantidad" value="#{facturasController.lineaFacturaActual.cantidad}" min="1" required="true" />
 
                            <h:outputLabel value="Precio unitario" for="precioUnitario"/>
-                           <b:inputText id="precioUnitario" value="#{facturasController.lineaFacturaActual.precioUnitario}"/>
+                           <b:inputText id="precioUnitario" value="#{facturasController.lineaFacturaActual.precioUnitario}">
+                               <f:convertNumber/>
+                           </b:inputText>
 
-                           <h:outputLabel value="Tipo de iva" for="tipoiva"/>
+                           <h:outputLabel value="Tipo de IVA" for="tipoiva"/>
                            <b:selectOneMenu value="#{facturasController.lineaFacturaActual.tipoIva}" ajax="true" >
-                               <f:selectItems value="#{facturasController.tiposIva}"/>
+                               <f:selectItems value="#{facturasController.tiposIva}" var="tipoiva" itemLabel="#{tipoiva.nombre}"/>
                            </b:selectOneMenu>
 
                            <h:outputLabel value="% descuento" for="porcentaje"/>
                            <b:slider2 min="0" max="1" step=".05" span="7" id="porcentaje" value="#{facturasController.lineaFacturaActual.porcentajeDescuento}" />
-
-                           <h:outputLabel value="Importe total" for="importe" />
-                           <h:outputText id="importe" value="#{(facturasController.lineaFacturaActual.precioUnitario * facturasController.lineaFacturaActual.cantidad) / facturasController.lineaFacturaActual.porcentajeDescuento}" />
-                        
-
-
-
                        </b:panelGrid>
                        <b:commandButton value="Guardar Cambios" 
                                          ajax="true" process="@form" update=":formularioEditar:tablaListadoLineas :mensajesGlobal " 
